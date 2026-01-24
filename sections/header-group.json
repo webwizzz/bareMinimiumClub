@@ -11,36 +11,6 @@
   "type": "header",
   "name": "Header",
   "sections": {
-    "header_announcements_WbCTVz": {
-      "type": "header-announcements",
-      "blocks": {
-        "announcement_mxxhta": {
-          "type": "_announcement",
-          "settings": {
-            "text": "Uplevel your office with new decor",
-            "link": "shopify://collections/all",
-            "font": "var(--font-primary--family)",
-            "font_size": "var(--font-size--body-md)",
-            "weight": "",
-            "letter_spacing": "normal",
-            "case": "none"
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "announcement_mxxhta"
-      ],
-      "name": "t:names.announcement_bar",
-      "settings": {
-        "speed": 5,
-        "section_width": "full-width",
-        "color_scheme": "",
-        "divider_width": 0,
-        "padding-block-start": 15,
-        "padding-block-end": 15
-      }
-    },
     "header_section": {
       "type": "header",
       "blocks": {
@@ -62,7 +32,7 @@
           "settings": {
             "menu": "main-menu",
             "color_scheme": "",
-            "type_font_primary_size": "var(--font-size--body-md)",
+            "type_font_primary_size": "0.875rem",
             "menu_font_style": "inverse",
             "type_font_primary_link": "primary",
             "type_case_primary_link": "none",
@@ -72,9 +42,9 @@
             "image_border_radius": 0,
             "navigation_bar": false,
             "color_scheme_navigation_bar": "",
-            "drawer_accordion": false,
-            "drawer_accordion_expand_first": false,
-            "drawer_dividers": false
+            "drawer_accordion": true,
+            "drawer_accordion_expand_first": true,
+            "drawer_dividers": true
           },
           "blocks": {}
         }
@@ -89,19 +59,19 @@
         "show_country": true,
         "country_selector_style": true,
         "show_language": true,
-        "localization_font": "body",
-        "localization_font_size": "0.875rem",
+        "localization_font": "heading",
+        "localization_font_size": "1.125rem",
         "localization_position": "right",
         "localization_row": "top",
-        "section_width": "page-width",
+        "section_width": "full-width",
         "section_height": "standard",
         "enable_sticky_header": "scroll-up",
         "divider_width": 0,
         "divider_size": "page-width",
         "border_width": 0,
-        "color_scheme_top": "scheme-1",
+        "color_scheme_top": "scheme-2",
         "color_scheme_bottom": "",
-        "color_scheme_transparent": "scheme-6",
+        "color_scheme_transparent": "scheme-1",
         "enable_transparent_header_home": true,
         "home_color_scheme": "inverse",
         "enable_transparent_header_product": false,
@@ -112,7 +82,6 @@
     }
   },
   "order": [
-    "header_announcements_WbCTVz",
     "header_section"
   ]
 }
