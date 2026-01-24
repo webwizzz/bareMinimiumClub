@@ -1,0 +1,138 @@
+{% schema %}
+{
+  "name": "Image + Text",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile image (optional)"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "BUILT ON THE"
+    },
+    {
+      "type": "text",
+      "id": "heading_line2",
+      "label": "Heading (line 2 - script/brand)",
+      "default": "Bare Minimum"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading / tagline",
+      "default": "Minimal Mindset. Maximum Attitude."
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Text alignment",
+      "options": [
+        {"value":"center","label":"Center"},
+        {"value":"left","label":"Left"},
+        {"value":"right","label":"Right"}
+      ],
+      "default": "center"
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    { "name": "Image + Text", "category": "Image" }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+.image-text-section { padding: 48px 0; }
+.image-text__wrap { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+.image-text__text { margin-bottom: 28px; }
+.image-text--align-left .image-text__text { text-align: left; }
+.image-text--align-right .image-text__text { text-align: right; }
+.image-text--align-center .image-text__text { text-align: center; }
+.image-text__heading {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  font-weight: 500;
+  margin: 0 0 6px;
+  color: #000;
+  line-height: 0.95;
+  font-size: 108px;
+}
+.image-text__heading-line2 {
+  font-family: 'Brush Script MT', 'Times New Roman', serif;
+  font-style: italic;
+  color: #122443;
+  margin: -14px 0 10px;
+  font-size: 98px;
+  line-height: 0.9;
+}
+.image-text__subheading {
+  font-size: 14px;
+  color: #000;
+  font-weight: 600;
+  margin: 0 auto;
+}
+.image-text__image { display:block; width:100%; overflow:hidden; }
+.image-text__image img { width:100%; height:auto; display:block; object-fit:cover; }
+
+/* Tablet adjustments */
+@media (max-width: 1024px) {
+  .image-text__heading { font-size: clamp(40px, 8.5vw, 96px); }
+}
+
+/* Mobile adjustments: keep same alignment but reduce text sizes and show mobile image if provided */
+@media (max-width: 749px) {
+  .image-text-section { padding: 28px 0; }
+  .image-text__heading { font-size: 42px; }
+  .image-text__subheading { font-size: 12px; }
+  .image-text__image { border-radius:8px; }
+  .image-text__heading-line2{
+    font-size: 38px;
+  }
+}
+
+{% endstylesheet %}
+
+<section id="image-text-{{ section.id }}" class="image-text-section image-text--align-{{ section.settings.alignment }}">
+  <div class="image-text__wrap">
+    <div class="image-text__text">
+      {% if section.settings.heading != blank %}
+        <h2 class="image-text__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.heading_line2 != blank %}
+        <div class="image-text__heading-line2">{{ section.settings.heading_line2 }}</div>
+      {% endif %}
+      {% if section.settings.subheading != blank %}
+        <div class="image-text__subheading">{{ section.settings.subheading }}</div>
+      {% endif %}
+    </div>
+
+    <div class="image-text__image" role="img" aria-label="{{ section.settings.heading }}">
+      {% assign desktop = section.settings.desktop_image %}
+      {% assign mobile = section.settings.mobile_image %}
+
+      {% if section.settings.mobile_image != blank %}
+        <picture>
+          <source media="(max-width: 749px)" srcset="{{ mobile | img_url: '800x' }}">
+          {% if desktop != blank %}
+            <img src="{{ desktop | img_url: '2048x' }}" alt="{{ section.settings.heading }}">
+          {% else %}
+            <img src="{{ mobile | img_url: '2048x' }}" alt="{{ section.settings.heading }}">
+          {% endif %}
+        </picture>
+      {% else %}
+        {% if desktop != blank %}
+          <img src="{{ desktop | img_url: '2048x' }}" alt="{{ section.settings.heading }}">
+        {% else %}
+          <div style="background:#f5f5f5; height:220px; border-radius:12px;"></div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</section>
