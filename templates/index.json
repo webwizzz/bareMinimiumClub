@@ -159,6 +159,7 @@
                 "overlay_style": "solid",
                 "gradient_direction": "to top",
                 "link": "",
+                "link": "",
                 "open_in_new_tab": false,
                 "padding-block-start": 24,
                 "padding-block-end": 24,
@@ -246,9 +247,10 @@
       "settings": {
         "collection": "all",
         "layout_type": "carousel",
+        "layout_type": "carousel",
         "carousel_on_mobile": false,
         "max_products": 8,
-        "columns": 4,
+        "columns": 3,
         "mobile_columns": "2",
         "mobile_card_size": "44cqw",
         "columns_gap": 12,
@@ -373,3 +375,4 @@
     "image_text_Wp9rkE"
   ]
 }
+
