@@ -9,6 +9,9 @@
  */
 {
   "current": {
+    "logo": "shopify://shop_images/TBMC_OPT_8.png",
+    "logo_height": 100,
+    "logo_height_mobile": 28,
     "type_body_font": "instrument_sans_n4",
     "type_subheading_font": "instrument_sans_n4",
     "type_heading_font": "instrument_serif_n4",
@@ -30,19 +33,20 @@
     "card_corner_radius": 10,
     "variant_button_radius": 100,
     "variant_button_width": "default-width-buttons",
+    "content_for_index": [],
     "color_schemes": {
       "scheme-1": {
         "settings": {
           "background": "#ffffff",
           "foreground_heading": "#000000",
-          "foreground": "#000000",
-          "primary": "#000000",
+          "foreground": "#122443",
+          "primary": "#122443",
           "primary_hover": "#82a31a",
-          "border": "#e6e6e6",
+          "border": "#122443",
           "shadow": "#000000",
           "primary_button_background": "#c3cca6",
           "primary_button_text": "#000000",
-          "primary_button_border": "#000000",
+          "primary_button_border": "#122443",
           "primary_button_hover_background": "#000000",
           "primary_button_hover_text": "#ffffff",
           "primary_button_hover_border": "#000000",
@@ -343,9 +347,7 @@
           "selected_variant_hover_border_color": "#1a1a1a"
         }
       }
-    },
-    "logo_height": 36,
-    "logo_height_mobile": 28
+    }
   },
   "presets": {
     "Tinker": {

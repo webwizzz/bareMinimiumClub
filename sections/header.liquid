@@ -743,6 +743,60 @@
   .header-menu .menu-list__submenu[data-active] {
     content-visibility: visible;
   }
+
+  /* Custom pill header to match provided design */
+  @media screen and (min-width: 750px) {
+    .header__row--top {
+      /* remove default background so the inner columns form the pill */
+      background: transparent;
+      padding-block: 18px 0;
+    }
+
+    .header__row--top .header__columns {
+      background-color: var(--color-background);
+      border: 2px solid var(--color-border);
+      border-radius: 34px;
+      padding-block: 2px;
+      padding-inline: 28px;
+      margin-inline: calc(var(--page-margin));
+      align-items: center;
+      box-shadow: 0 2px 0 rgba(16, 24, 40, 0.02);
+    }
+
+    /* Slightly increase spacing for logo area to match the visual reference */
+    .header__row--top .header__column--left {
+      padding-left: 6px;
+    }
+
+    /* Keep actions aligned inside the pill */
+    .header__row--top .header__column--right {
+      padding-right: 6px;
+    }
+
+    /* Enlarge icons and menu items slightly to improve tap/click targets */
+    .header__row--top .header-actions__action svg,
+    .header__row--top .menu-list__link svg,
+    .header__row--top .dropdown-localization__button .svg-wrapper,
+    .header__row--top .header__icon--menu svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .header__row--top .menu-list__link,
+    .header__row--top .header-actions__action,
+    .header__row--top .dropdown-localization__button {
+      font-size: 1.0625rem; /* ~17px */
+      padding-inline: 8px;
+    }
+
+    /* Keep items vertically centered when icons grow */
+    .header__row--top .header-actions__action,
+    .header__row--top .menu-list__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
 {% endstylesheet %}
 
 {% unless request.design_mode %}
