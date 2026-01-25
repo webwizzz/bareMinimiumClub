@@ -1,10 +1,10 @@
 
 
 {% liquid
-  assign order = 'logo,menu,localization,search,mobile_search,actions'
+  assign order = 'logo,menu,localization,search,mobile_search,actions,mobile_menu'
 
   if shop.customer_accounts_enabled
-    assign order = 'mobile_search,logo,menu,localization,search,actions'
+    assign order = 'mobile_search,logo,menu,localization,search,actions,mobile_menu'
   endif
 
   assign rows = 'top,bottom' | split: ','
@@ -71,23 +71,23 @@
   if section.settings.localization_position == 'left'
     if section.settings.search_position == 'left'
       if shop.customer_accounts_enabled
-        assign order = 'mobile_search,logo,search,localization,menu,actions'
+        assign order = 'mobile_search,logo,search,localization,menu,actions,mobile_menu'
       else
-        assign order = 'logo,search,localization,menu,mobile_search,actions'
+        assign order = 'logo,search,localization,menu,mobile_search,actions,mobile_menu'
       endif
     else
       if shop.customer_accounts_enabled
-        assign order = 'mobile_search,logo,localization,menu,search,actions'
+        assign order = 'mobile_search,logo,localization,menu,search,actions,mobile_menu'
       else
-        assign order = 'logo,localization,menu,search,mobile_search,actions'
+        assign order = 'logo,localization,menu,search,mobile_search,actions,mobile_menu'
       endif
     endif
   else
     if section.settings.search_position == 'left'
       if shop.customer_accounts_enabled
-        assign order = 'mobile_search,logo,search,menu,localization,actions'
+        assign order = 'mobile_search,logo,search,menu,localization,actions,mobile_menu'
       else
-        assign order = 'logo,search,menu,localization,mobile_search,actions'
+        assign order = 'logo,search,menu,localization,mobile_search,actions,mobile_menu'
       endif
     endif
   endif
@@ -296,7 +296,7 @@
 
       case row
         when 'top'
-          assign first = mobile_menu
+          assign first = ''
 
           if bottom_row_blocks.size > 0 and section.settings.divider_size == 'page-width'
             assign class = class | append: ' divider--page-width'
@@ -332,7 +332,8 @@
         actions: actions,
         localization: localization_markup,
         search: search,
-        mobile_search: mobile_search
+        mobile_search: mobile_search,
+        mobile_menu: mobile_menu
       %}
     {% endcapture %}
 
@@ -629,6 +630,31 @@
         grid-area: rightB;
       }
     }
+
+    /* Large screen drawer styling */
+    @media screen and (min-width: 750px) {
+      .header__drawer {
+        display: flex;
+        align-items: center;
+      }
+
+      .header__icon--menu {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+      }
+
+      /* Position drawer button in right column on large screens, after other actions */
+      .header__column--right .header__drawer {
+        order: 99; /* Ensure drawer button appears last (after cart icon) in right column */
+      }
+
+      /* Ensure proper spacing between icons */
+      .header__column--right {
+        gap: var(--gap-lg);
+      }
+    }
   }
 
   /* Single column layout if there are no columns within */
@@ -795,6 +821,60 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
+    }
+
+    /* Large screen drawer styling */
+    .header__drawer {
+      display: flex;
+      align-items: center;
+    }
+
+    /* Ensure drawer button is visible and properly styled on large screens */
+    .header__icon--menu {
+      display: flex !important;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: var(--button-border-radius, 4px);
+      transition: background-color var(--animation-speed) ease;
+    }
+
+    .header__icon--menu:hover {
+      background-color: var(--color-border);
+    }
+
+    /* Drawer menu positioning for large screens */
+    .menu-drawer-container[open] .menu-drawer {
+      width: 320px;
+      max-width: 90vw;
+    }
+
+    /* Make header icons larger */
+    .header .svg-wrapper {
+      width: var(--icon-size-lg);
+      height: var(--icon-size-lg);
+    }
+
+    .header .svg-wrapper > svg,
+    .header svg {
+      width: var(--icon-size-lg);
+      height: var(--icon-size-lg);
+    }
+
+    /* Make only right-side header icons exactly 24x24 */
+    .header__column--right .svg-wrapper,
+    .header__column--right .svg-wrapper > svg,
+    .header__column--right svg {
+      width: 24px !important;
+      height: 24px !important;
+    }
+
+    /* Increase space between search and cart on the right side (desktop only) */
+    @media screen and (min-width: 750px) {
+      .header__column--right .search-action {
+        margin-inline-end: 32px !important;
+      }
     }
   }
 {% endstylesheet %}
