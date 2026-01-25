@@ -13,7 +13,7 @@
       "type": "hero-banner",
       "name": "Hero banner - custom",
       "settings": {
-        "desktop_image": "shopify://shop_images/Rectangle_65.png",
+        "desktop_image": "shopify://shop_images/WhatsApp_Image_2026-01-22_at_5.42.58_AM_3.jpg",
         "mobile_image": "shopify://shop_images/Rectangle_36.png",
         "heading_line1": "BUILT ON THE",
         "heading_line2": "Bare Minimum",
@@ -159,7 +159,6 @@
                 "overlay_style": "solid",
                 "gradient_direction": "to top",
                 "link": "",
-                "link": "",
                 "open_in_new_tab": false,
                 "padding-block-start": 24,
                 "padding-block-end": 24,
@@ -247,7 +246,6 @@
       "settings": {
         "collection": "all",
         "layout_type": "carousel",
-        "layout_type": "carousel",
         "carousel_on_mobile": false,
         "max_products": 8,
         "columns": 3,
@@ -314,7 +312,7 @@
               "type": "_collection-card-image",
               "static": true,
               "settings": {
-                "image_ratio": "portrait",
+                "image_ratio": "square",
                 "toggle_overlay": false,
                 "overlay_color": "#00000026",
                 "overlay_style": "solid",
@@ -335,21 +333,22 @@
       "name": "Collection list",
       "settings": {
         "collection_list": [
-          "home",
-          "frontpage"
+          "inner-artist-collection",
+          "summer-collection",
+          "winter-collection"
         ],
         "layout_type": "grid",
         "carousel_on_mobile": true,
-        "columns": 4,
+        "columns": 3,
         "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
+        "mobile_card_size": "44cqw",
         "columns_gap": 16,
         "bento_gap": 12,
         "rows_gap": 16,
         "max_collections": 4,
         "icons_style": "arrow",
         "icons_shape": "none",
-        "section_width": "full-width",
+        "section_width": "page-width",
         "gap": 12,
         "color_scheme": "",
         "padding-block-start": 0,
@@ -360,9 +359,9 @@
       "type": "image-text",
       "name": "Image + Text",
       "settings": {
-        "desktop_image": "shopify://shop_images/Group_94.png",
-        "mobile_image": "shopify://shop_images/Group_94.png",
+        "desktop_image": "shopify://shop_images/WhatsApp_Image_2026-01-22_at_5.42.58_AM.jpg",
         "heading": "BUILT ON THE",
+        "heading_line2": "Bare Minimum",
         "subheading": "Minimal Mindset. Maximum Attitude.",
         "alignment": "center"
       }
@@ -375,4 +374,3 @@
     "image_text_Wp9rkE"
   ]
 }
-
