@@ -23,9 +23,13 @@
         {
           "value": "carousel",
           "label": "t:options.carousel"
+        },
+        {
+          "value": "main_with_thumbnails",
+          "label": "Main Image with Thumbnail Carousel"
         }
       ],
-      "default": "grid",
+      "default": "main_with_thumbnails",
       "info": "t:info.carousel_layout_on_mobile"
     },
     {
@@ -71,6 +75,43 @@
     {
       "type": "header",
       "content": "t:content.carousel"
+    },
+    {
+      "type": "header", 
+      "content": "Main Image with Thumbnails",
+      "visible_if": "{{ block.settings.media_presentation == 'main_with_thumbnails' }}"
+    },
+    {
+      "type": "range",
+      "id": "thumbnails_per_view",
+      "label": "Thumbnails per view",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 3,
+      "visible_if": "{{ block.settings.media_presentation == 'main_with_thumbnails' }}"
+    },
+    {
+      "type": "range",
+      "id": "thumbnail_size",
+      "label": "Thumbnail Size",
+      "min": 80,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "default": 100,
+      "visible_if": "{{ block.settings.media_presentation == 'main_with_thumbnails' }}"
+    },
+    {
+      "type": "range",
+      "id": "thumbnail_gap",
+      "label": "Gap between thumbnails",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px", 
+      "default": 10,
+      "visible_if": "{{ block.settings.media_presentation == 'main_with_thumbnails' }}"
     },
     {
       "type": "select",
