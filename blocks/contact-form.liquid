@@ -57,7 +57,7 @@
         autocomplete="name"
         name="contact[name]"
         value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
-        placeholder="{{ 'blocks.contact_form.name' | t }}"
+        placeholder="Name"
       >
 
       <label
@@ -81,7 +81,7 @@
           aria-invalid="true"
           aria-describedby="ContactForm-email-error"
         {% endif %}
-        placeholder="{{ 'blocks.contact_form.email' | t }}"
+        placeholder="Email"
       >
     </div>
 
@@ -99,7 +99,7 @@
       name="contact[phone]"
       pattern="[0-9\-]*"
       value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
-      placeholder="{{ 'blocks.contact_form.phone' | t }}"
+      placeholder="Phone"
     >
 
     <label
@@ -113,7 +113,7 @@
       id="ContactForm-body"
       class="contact-form__input contact-form__input--textarea"
       name="contact[body]"
-      placeholder="{{ 'blocks.contact_form.comment' | t }}"
+      placeholder="Message"
     >
       {{- form.body -}}
     </textarea>

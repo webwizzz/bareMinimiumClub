@@ -1408,9 +1408,9 @@ button.shopify-payment-button__button--unbranded {
   align-content: center;
   text-decoration: none;
   text-align: var(--text-align);
-  color: var(--button-color);
+  color: white;
   appearance: none;
-  background-color: var(--button-background-color);
+  background-color: #122443;
   border: none;
   font-family: var(--font-paragraph--family);
   font-style: var(--font-paragraph--style);
@@ -1430,17 +1430,17 @@ button.shopify-payment-button__button--unbranded {
 .button {
   font-family: var(--button-font-family-primary);
   text-transform: var(--button-text-case-primary);
-  border-radius: var(--style-border-radius-buttons-primary);
+  border-radius: 0;
 }
 
 .button:not(.button-secondary, .button-unstyled) {
-  outline-color: var(--button-background-color);
+  outline-color: #122443;
 }
 
 .button-secondary {
   font-family: var(--button-font-family-secondary);
   text-transform: var(--button-text-case-secondary);
-  border-radius: var(--style-border-radius-buttons-secondary);
+  border-radius: 0;
 }
 
 button.shopify-payment-button__button--unbranded {
@@ -2361,7 +2361,7 @@ product-price.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6) > *:not(.tax-note) {
 
 /* Size style */
 .size-style {
-  width: var(--size-style-width-mobile, var(--size-style-width));
+  width: 100%;
   height: var(--size-style-height-mobile, var(--size-style-height));
 
   @media screen and (min-width: 750px) {
