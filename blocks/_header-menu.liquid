@@ -14,7 +14,7 @@
 {% case variant %}
   {% when 'mobile' %}
     <div
-      class="header__drawer desktop:hidden"
+      class="header__drawer"
       ref="headerDrawerContainer"
       {{ block.shopify_attributes }}
     >
@@ -149,38 +149,7 @@
       </li>
     {% endcapture %}
 
-    <header-menu
-      ref="headerMenu"
-      class="header-menu mobile:hidden"
-      data-animation-delay="{{ animation_speed }}"
-      {{ block.shopify_attributes }}
-      style="--submenu-animation-speed: {{ animation_speed }}ms;"
-    >
-      <div class="header-menu__inner">
-        <nav header-menu>
-          <div
-            class="menu-list"
-            style="{% render 'menu-font-styles', settings: block_settings %}"
-          >
-            {% assign class = 'overflow-menu' | append: color_scheme_classes %}
-            {% render 'overflow-list',
-              class: class,
-              ref: 'overflowMenu',
-              children: children,
-              minimum-items: 2,
-              data-testid: 'header-menu-overflow-list',
-              attributes: 'data-skip-node-update'
-            %}
-          </div>
-        </nav>
-      </div>
-
-      <script
-        src="{{ 'header-menu.js' | asset_url }}"
-        type="module"
-        fetchpriority="low"
-      ></script>
-    </header-menu>
+    {% comment %} Menu items hidden - only showing in sidebar drawer {% endcomment %}
 {% endcase %}
 
 {% stylesheet %}

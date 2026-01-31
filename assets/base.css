@@ -140,6 +140,48 @@ select {
   z-index: var(--layer-flat);
 }
 
+/* Product list: force product card size to 320x406 for this section only */
+[data-testid="product-list"] .resource-list__item {
+  /* Maintain a 320x406 aspect ratio responsively.
+     Use width constraints and leave height to aspect-ratio so cards scale.
+  */
+  --card-base-width: 320px;
+  max-width: var(--card-base-width);
+  flex: 0 0 calc(var(--card-base-width));
+}
+
+[data-testid="product-list"] .resource-list__item .product-card {
+  aspect-ratio: 320 / 406;
+  width: 100%;
+  height: auto; /* allow aspect-ratio to determine height */
+  display: block;
+}
+
+/* Allow the grid to shrink on smaller viewports while preserving aspect ratio */
+@media (max-width: 360px) {
+  [data-testid="product-list"] .resource-list__item {
+    --card-base-width: calc(100vw - 32px);
+    flex: 0 0 var(--card-base-width);
+  }
+}
+
+/* Collection list: maintain 400x321 aspect ratio on desktops and large screens */
+@media (min-width: 1024px) {
+  [data-testid="collection-list"] .resource-list__item {
+    --collection-card-width: 400px;
+    max-width: var(--collection-card-width);
+    flex: 0 0 calc(var(--collection-card-width));
+  }
+
+  [data-testid="collection-list"] .resource-list__item .collection-card__image,
+  [data-testid="collection-list"] .resource-list__item .collection-card {
+    aspect-ratio: 400 / 321;
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+}
+
 .product-card__link {
   position: absolute;
   inset: 0;

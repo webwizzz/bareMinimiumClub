@@ -11,10 +11,13 @@
   "sections": {
     "collection_banner1_bTTtdc": {
       "type": "collection-banner1",
+      "custom_css": [
+        ".collection-banner__image {padding-left: 36px; padding-right: 36px;}"
+      ],
       "name": "Collection banner",
       "settings": {
         "fallback_image": "shopify://shop_images/WhatsApp_Image_2026-01-22_at_5.42.58_AM_9.jpg",
-        "alignment": "left"
+        "alignment": "center"
       }
     },
     "main": {
@@ -47,6 +50,9 @@
           "type": "_product-card",
           "static": true,
           "settings": {
+            "featured_product": "{{ closest.product }}",
+            "placeholder_title": "Product Title",
+            "placeholder_price": "4999/-",
             "product_card_gap": 0,
             "inherit_color_scheme": false,
             "color_scheme": "scheme-e1e09ff5-6396-47cd-ad7a-c05470cf2a2e",
@@ -62,6 +68,7 @@
           "blocks": {
             "card-gallery": {
               "type": "_product-card-gallery",
+              "disabled": true,
               "settings": {
                 "image_ratio": "square",
                 "border": "none",
@@ -77,6 +84,7 @@
             },
             "group": {
               "type": "_product-card-group",
+              "disabled": true,
               "settings": {
                 "content_direction": "column",
                 "vertical_on_mobile": true,
@@ -190,13 +198,13 @@
       },
       "settings": {
         "layout_type": "grid",
-        "product_card_size": "large",
+        "product_card_size": "medium",
         "mobile_product_card_size": "small",
         "enable_infinite_scroll": false,
         "products_per_page": 24,
         "product_grid_width": "centered",
         "full_width_on_mobile": false,
-        "columns_gap_horizontal": 16,
+        "columns_gap_horizontal": 35,
         "columns_gap_vertical": 16,
         "padding-inline-start": 0,
         "padding-inline-end": 0,

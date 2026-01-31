@@ -1,11 +1,8 @@
 
 
 {% liquid
-  assign order = 'logo,menu,localization,search,mobile_search,actions'
-
-  if shop.customer_accounts_enabled
-    assign order = 'mobile_search,logo,menu,localization,search,actions'
-  endif
+  # Consistent order for all screen sizes: logo in center, menu on left, search and actions on right
+  assign order = 'menu,logo,localization,search,actions,mobile_menu'
 
   assign rows = 'top,bottom' | split: ','
   assign search_style = 'none'
@@ -62,53 +59,12 @@
   capture actions
     render 'header-actions'
   endcapture
-
-  if shop.customer_accounts_enabled
-    assign search_class = 'mobile:hidden'
-  endif
-
-  # Handle localization positioning
-  if section.settings.localization_position == 'left'
-    if section.settings.search_position == 'left'
-      if shop.customer_accounts_enabled
-        assign order = 'mobile_search,logo,search,localization,menu,actions'
-      else
-        assign order = 'logo,search,localization,menu,mobile_search,actions'
-      endif
-    else
-      if shop.customer_accounts_enabled
-        assign order = 'mobile_search,logo,localization,menu,search,actions'
-      else
-        assign order = 'logo,localization,menu,search,mobile_search,actions'
-      endif
-    endif
-  else
-    if section.settings.search_position == 'left'
-      if shop.customer_accounts_enabled
-        assign order = 'mobile_search,logo,search,menu,localization,actions'
-      else
-        assign order = 'logo,search,menu,localization,mobile_search,actions'
-      endif
-    endif
-  endif
   capture search
-    render 'search', style: search_style, class: search_class
+    render 'search', style: search_style
   endcapture
 
-  # Skip mobile search under specific conditions:
-  # Always render if search_row is bottom
-  # Don't render when shop.customer_accounts_enabled is false and search_position is left and search_style is not none
-  assign skip_mobile_search = false
-  if shop.customer_accounts_enabled == false and section.settings.search_position == 'left' and search_style != 'none'
-    assign skip_mobile_search = true
-  endif
-
-  if section.settings.search_row == 'bottom' or search_style != 'none' and skip_mobile_search == false
-    # Mobile search duplicate for when search is not in the right order for mobile layout
-    capture mobile_search
-      render 'search', class: 'desktop:hidden', style: search_style
-    endcapture
-  endif
+  # Remove mobile search since we're using consistent layout
+  assign mobile_search = ''
 
   assign show_language = section.settings.show_language
   if localization.available_languages.size <= 1
@@ -296,7 +252,7 @@
 
       case row
         when 'top'
-          assign first = mobile_menu
+          assign first = ''
 
           if bottom_row_blocks.size > 0 and section.settings.divider_size == 'page-width'
             assign class = class | append: ' divider--page-width'
@@ -332,7 +288,8 @@
         actions: actions,
         localization: localization_markup,
         search: search,
-        mobile_search: mobile_search
+        mobile_search: mobile_search,
+        mobile_menu: mobile_menu
       %}
     {% endcapture %}
 
@@ -523,11 +480,6 @@
   .header__column {
     display: flex;
     align-items: center;
-
-    /* on mobile, header__column nodes are ignored to create a new grid-template-area based on all visible content */
-    @media screen and (max-width: 749px) {
-      display: contents;
-    }
   }
 
   .header__column--left,
@@ -599,34 +551,32 @@
     }
 
     @media screen and (max-width: 749px) {
-      --header-template-columns: var(--header-mobile-bookend) var(--header-mobile-bookend) 1fr
-        var(--header-mobile-bookend) var(--header-mobile-bookend);
+      gap: var(--gap-sm);
+      padding-inline: var(--padding-xs);
+    }
 
-      grid-template-areas: 'leftA leftB center rightA rightB';
-      grid-column: span 3;
-      column-gap: 0;
-      align-items: center;
-      padding-block: 0;
-      padding-inline: 0 var(--padding-3xs);
-
-      .header-logo {
-        grid-area: center;
+    /* Large screen drawer styling */
+    @media screen and (min-width: 750px) {
+      .header__drawer {
+        display: flex;
+        align-items: center;
       }
 
-      &:not(:has(header-actions)) .search-action {
-        grid-area: leftB;
+      .header__icon--menu {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
       }
 
-      &:not(:has(.account-actions)) .search-action {
-        grid-area: rightA;
+      /* Position drawer button in right column on large screens, after other actions */
+      .header__column--right .header__drawer {
+        order: 99; /* Ensure drawer button appears last (after cart icon) in right column */
       }
 
-      .search-action {
-        grid-area: leftB;
-      }
-
-      header-actions {
-        grid-area: rightB;
+      /* Ensure proper spacing between icons */
+      .header__column--right {
+        gap: var(--gap-lg);
       }
     }
   }
@@ -745,35 +695,60 @@
   }
 
   /* Custom pill header to match provided design */
-  @media screen and (min-width: 750px) {
+  .header__row--top {
+    /* remove default background so the inner columns form the pill */
+    background: transparent;
+    padding-block: 18px 0;
+  }
+
+  .header__row--top .header__columns {
+    background-color: var(--color-background);
+    border: 2px solid var(--color-border);
+    border-radius: 34px;
+    padding-block: 2px;
+    padding-inline: 28px;
+    margin-inline: calc(var(--page-margin));
+    align-items: center;
+    box-shadow: 0 2px 0 rgba(16, 24, 40, 0.02);
+  }
+
+  /* Mobile adjustments for pill header */
+  @media screen and (max-width: 749px) {
     .header__row--top {
-      /* remove default background so the inner columns form the pill */
-      background: transparent;
-      padding-block: 18px 0;
+      padding-block: 12px 0;
     }
 
     .header__row--top .header__columns {
-      background-color: var(--color-background);
-      border: 2px solid var(--color-border);
-      border-radius: 34px;
-      padding-block: 2px;
-      padding-inline: 28px;
-      margin-inline: calc(var(--page-margin));
-      align-items: center;
-      box-shadow: 0 2px 0 rgba(16, 24, 40, 0.02);
+      border-radius: 24px;
+      padding-block: 1px;
+      padding-inline: 16px;
+      margin-inline: 16px;
     }
+  }
 
-    /* Slightly increase spacing for logo area to match the visual reference */
+  /* Slightly increase spacing for logo area to match the visual reference */
+  .header__row--top .header__column--left {
+    padding-left: 6px;
+  }
+
+  /* Keep actions aligned inside the pill */
+  .header__row--top .header__column--right {
+    padding-right: 6px;
+  }
+
+  /* Mobile adjustments for column spacing */
+  @media screen and (max-width: 749px) {
     .header__row--top .header__column--left {
-      padding-left: 6px;
+      padding-left: 3px;
     }
 
-    /* Keep actions aligned inside the pill */
     .header__row--top .header__column--right {
-      padding-right: 6px;
+      padding-right: 3px;
     }
+  }
 
-    /* Enlarge icons and menu items slightly to improve tap/click targets */
+  /* Desktop icons and text sizing */
+  @media screen and (min-width: 750px) {
     .header__row--top .header-actions__action svg,
     .header__row--top .menu-list__link svg,
     .header__row--top .dropdown-localization__button .svg-wrapper,
@@ -788,13 +763,130 @@
       font-size: 1.0625rem; /* ~17px */
       padding-inline: 8px;
     }
+  }
 
-    /* Keep items vertically centered when icons grow */
+  /* Mobile icons and text sizing */
+  @media screen and (max-width: 749px) {
+    .header__row--top .header-actions__action svg,
+    .header__row--top .menu-list__link svg,
+    .header__row--top .dropdown-localization__button .svg-wrapper,
+    .header__row--top .header__icon--menu svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .header__row--top .menu-list__link,
     .header__row--top .header-actions__action,
-    .header__row--top .menu-list__link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
+    .header__row--top .dropdown-localization__button {
+      font-size: 0.875rem; /* ~14px */
+      padding-inline: 6px;
+    }
+  }
+
+  /* Keep items vertically centered when icons grow */
+  .header__row--top .header-actions__action,
+  .header__row--top .menu-list__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  @media screen and (min-width: 750px) {
+
+  }
+
+  /* Drawer styling for all screen sizes */
+  .header__drawer {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Ensure drawer button is visible and properly styled */
+  .header__icon--menu {
+    display: flex !important;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: var(--button-border-radius, 4px);
+    transition: background-color var(--animation-speed) ease;
+  }
+
+  /* Mobile drawer button sizing */
+  @media screen and (max-width: 749px) {
+    .header__icon--menu {
+      padding: 6px;
+    }
+  }
+
+  .header__icon--menu:hover {
+    background-color: var(--color-border);
+  }
+
+  /* Drawer menu positioning */
+  .menu-drawer-container[open] .menu-drawer {
+    width: 320px;
+    max-width: 90vw;
+  }
+
+  /* Mobile drawer sizing */
+  @media screen and (max-width: 749px) {
+    .menu-drawer-container[open] .menu-drawer {
+      width: 280px;
+    }
+  }
+
+  /* Desktop header icons */
+  @media screen and (min-width: 750px) {
+    .header .svg-wrapper {
+      width: var(--icon-size-lg);
+      height: var(--icon-size-lg);
+    }
+
+    .header .svg-wrapper > svg,
+    .header svg {
+      width: var(--icon-size-lg);
+      height: var(--icon-size-lg);
+    }
+
+    /* Make only right-side header icons exactly 24x24 */
+    .header__column--right .svg-wrapper,
+    .header__column--right .svg-wrapper > svg,
+    .header__column--right svg {
+      width: 24px !important;
+      height: 24px !important;
+    }
+
+    /* Increase space between search and cart on the right side (desktop only) */
+    .header__column--right .search-action {
+      margin-inline-end: 32px !important;
+    }
+  }
+
+  /* Mobile header icons sizing */
+  @media screen and (max-width: 749px) {
+    .header .svg-wrapper {
+      width: 20px;
+      height: 20px;
+    }
+
+    .header .svg-wrapper > svg,
+    .header svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Make mobile right-side header icons 20x20 */
+    .header__column--right .svg-wrapper,
+    .header__column--right .svg-wrapper > svg,
+    .header__column--right svg {
+      width: 20px !important;
+      height: 20px !important;
+    }
+
+    /* Adjust space between search and cart on mobile */
+    .header__column--right .search-action {
+      margin-inline-end: 16px !important;
     }
   }
 {% endstylesheet %}
