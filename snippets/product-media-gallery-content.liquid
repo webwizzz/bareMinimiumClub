@@ -298,6 +298,191 @@
   >
     {{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-image' }}
   </div>
+{% elsif media_presentation == 'main_with_thumbnails' %}
+  <script
+    src="{{ 'product-media-gallery-main-thumbnails.js' | asset_url }}"
+    type="module"
+  ></script>
+  <div
+    class="product-media-gallery--main-with-thumbnails spacing-style"
+    style="{% render 'spacing-style', settings: block_settings %} --thumbnail-size: {{ block_settings.thumbnail_size | default: 100 }}px; --thumbnail-gap: {{ block_settings.thumbnail_gap | default: 10 }}px; --thumbnails-per-view: {{ block_settings.thumbnails_per_view | default: 3 }}; --media-radius: {{ block_settings.media_radius }}px;"
+    {{ block_shopify_attributes }}
+  >
+    <!-- Main Image -->
+    <div class="main-image-container">
+      <div class="{{ product_media_container_class }} product-media-container--{{ sorted_media.first.media_type }}{% if block_settings.zoom %} product-media-container--zoomable{% endif %}">
+        {% if block_settings.zoom and sorted_media.first.media_type == 'image' %}
+          <button
+            type="button"
+            class="button button-unstyled product-media-container__zoom-button"
+            aria-label="{{ 'actions.zoom' | t }}"
+            on:click="#zoom-dialog-{{ block_id }}/open/0"
+            data-current-index="0"
+          >
+            <span class="visually-hidden">{{ 'actions.open_image_in_full_screen' | t }}</span>
+          </button>
+        {% endif %}
+        {% if block_settings.aspect_ratio != 'adapt' and block_settings.constrain_to_viewport %}
+          <div class="product-media-constraint-wrapper">
+            {%- render 'product-media', media: sorted_media.first, sizes: sizes, is_main_product_media: true -%}
+          </div>
+        {% else %}
+          {%- render 'product-media', media: sorted_media.first, sizes: sizes, is_main_product_media: true -%}
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Thumbnail Carousel -->
+    {% if sorted_media.size > 1 %}
+      <div class="thumbnail-carousel-container">
+      
+        <div class="thumbnail-carousel-wrapper">
+          <ul class="thumbnail-carousel list-unstyled">
+            {% for media in sorted_media %}
+              <li class="thumbnail-item{% if forloop.first %} active{% endif %}" data-media-index="{{ forloop.index0 }}">
+                <button type="button" class="thumbnail-btn" aria-label="View {{ media.alt | default: 'Product image' }}">
+                  <div class="thumbnail-media" style="{% if block_settings.aspect_ratio == 'adapt' %}--media-preview-ratio: {{ media.preview_image.aspect_ratio | default: 1.0 }};{% endif %}">
+                    {% liquid
+                      assign focal_point_style = ''
+                      if media.presentation.focal_point != blank
+                        assign focal_point_style = 'object-position: ' | append: media.presentation.focal_point | append: ';'
+                      endif
+                    %}
+                    {{
+                      media.preview_image
+                      | image_url: width: 400
+                      | image_tag:
+                        loading: 'lazy',
+                        sizes: '100px',
+                        widths: '100, 200, 300, 400',
+                        alt: media.alt,
+                        style: focal_point_style
+                    }}
+                  </div>
+                </button>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+        
+        <button class="thumbnail-nav-btn thumbnail-nav-btn--next" type="button" data-nav="next" aria-label="Next thumbnails">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M4.5 3L7.5 6L4.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    {% endif %}
+
+    <!-- Hidden media for main image switching -->
+    <div class="hidden-media" style="display: none;">
+      {% for media in sorted_media %}
+        <div class="hidden-media-item" data-media-index="{{ forloop.index0 }}">
+          {% if block_settings.aspect_ratio != 'adapt' and block_settings.constrain_to_viewport %}
+            <div class="product-media-constraint-wrapper">
+              {%- render 'product-media', media: media, sizes: sizes, is_main_product_media: true -%}
+            </div>
+          {% else %}
+            {%- render 'product-media', media: media, sizes: sizes, is_main_product_media: true -%}
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Zoom Dialog -->
+    {%- if block_settings.zoom -%}
+      <zoom-dialog
+        ref="zoomDialogComponent"
+        id="zoom-dialog-{{ block_id }}"
+      >
+        <dialog
+          ref="dialog"
+          on:keydown="/handleKeyDown"
+          scroll-lock
+        >
+          <button
+            type="button"
+            class="button button-unstyled close-button dialog-zoomed-gallery__close-button"
+            aria-label="{{ 'actions.close' | t }}"
+            on:click="/close"
+          >
+            <span class="visually-hidden">{{ 'actions.close' | t }}</span>
+            {{ 'icon-close.svg' | inline_asset_content }}
+          </button>
+          <ul class="dialog-zoomed-gallery list-unstyled">
+            {%- for media in sorted_media -%}
+              <li
+                id="product-{{ media.id}}-{{ forloop.index }}"
+                class="{{ product_media_container_class | remove: 'media-fit-cover' }} product-media-container--{{ media.media_type }}{% if media.media_type == 'image' %} product-media-container--zoomable{% endif %}"
+                style="{% if block_settings.aspect_ratio == 'adapt' %} --media-preview-ratio: {{ media.preview_image.aspect_ratio | default: 1.0 }};{% endif %}"
+                ref="media[]"
+                {% if media.media_type == 'image' %}
+                  on:click="/close"
+                {% endif %}
+              >
+                {% if media.media_type == 'image' %}
+                  <drag-zoom-wrapper class="product-media__drag-zoom-wrapper">
+                    {%- render 'product-media',
+                      media: media,
+                      sizes: '100vw',
+                      loading: 'lazy',
+                      is_main_product_media: forloop.first
+                    -%}
+                  </drag-zoom-wrapper>
+                {% else %}
+                  {%- render 'product-media',
+                    media: media,
+                    sizes: '100vw',
+                    loading: 'lazy',
+                    is_main_product_media: forloop.first
+                  -%}
+                {% endif %}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </dialog>
+      </zoom-dialog>
+    {%- endif -%}
+
+    {%- if first_3d_model -%}
+      <link
+        id="ModelViewerStyle"
+        rel="stylesheet"
+        href="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.css"
+        media="print"
+        onload="this.media='all'"
+      >
+      <script>
+        window.ProductModel = {
+          loadShopifyXR() {
+            Shopify.loadFeatures([
+              {
+                name: 'shopify-xr',
+                version: '1.0',
+                onLoad: this.setupShopifyXR.bind(this),
+              },
+            ]);
+          },
+
+          setupShopifyXR(errors) {
+            if (errors) return;
+
+            if (!window.ShopifyXR) {
+              document.addEventListener('shopify_xr_initialized', () => this.setupShopifyXR());
+              return;
+            }
+
+            document.querySelectorAll('[id^="ProductModelJSON-"]').forEach((modelJSON) => {
+              window.ShopifyXR.addModels(JSON.parse(modelJSON.textContent));
+              modelJSON.remove();
+            });
+            window.ShopifyXR.setupXRElements();
+          },
+        };
+
+        window.ProductModel.loadShopifyXR();
+      </script>
+    {%- endif -%}
+  </div>
 {% else %}
   <media-gallery
     class="
@@ -733,5 +918,205 @@
   .dialog-zoomed-gallery .product-media-container--model .product-media__image {
     /* Make the height match the height of the model-viewer */
     height: 100vh;
+  }
+
+  /* Main Image with Thumbnails Layout */
+  .product-media-gallery--main-with-thumbnails {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 700px; /* increased width */
+    max-width: 100%;
+  }
+
+  .main-image-container {
+    position: relative;
+    width: 100%;
+  }
+
+  /* Use explicit aspect ratio (700 / 520) to make the gallery slightly wider and a bit shorter.
+     Images will be cropped using object-fit: cover so visual composition stays tight. */
+  .main-image-container .product-media-container {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 700 / 520;
+    height: auto;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Ensure media content fills the container and is cropped when needed */
+  .main-image-container .product-media,
+  .main-image-container .product-media__image,
+  .main-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .thumbnail-carousel-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    background-color: #fff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%; /* match the main gallery width */
+  }
+
+  .thumbnail-nav-btn {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e0e0e0;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .thumbnail-carousel-container:hover .thumbnail-nav-btn:not(:disabled) {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .thumbnail-nav-btn--prev {
+    left: -18px;
+  }
+
+  .thumbnail-nav-btn--next {
+    right: -18px;
+  }
+
+  .thumbnail-nav-btn:hover {
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .thumbnail-nav-btn:disabled {
+    opacity: 0 !important;
+    pointer-events: none;
+  }
+
+  .thumbnail-nav-btn svg {
+    color: #333;
+  }
+
+  .thumbnail-carousel-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: relative;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .thumbnail-carousel-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .thumbnail-carousel {
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .thumbnail-item {
+    /* Three thumbnails in view: subtract total gaps (2 * 15px = 30px) then divide by 3 */
+    flex: 0 0 calc((100% - 30px) / 3);
+    width: calc((100% - 30px) / 3);
+    aspect-ratio: 1;
+  }
+
+  /* Responsive: on small screens make the gallery full width while preserving aspect ratio */
+  @media screen and (max-width: 749px) {
+    .product-media-gallery--main-with-thumbnails {
+      width: 100%;
+      gap: 10px;
+    }
+
+    .main-image-container .product-media-container {
+      aspect-ratio: 700 / 520;
+      width: 100%;
+      height: auto;
+    }
+
+    .thumbnail-item {
+      flex: 0 0 calc((100% - 20px) / 3);
+      width: calc((100% - 20px) / 3);
+    }
+  }
+
+  .thumbnail-btn {
+    width: 100%;
+    height: 100%;
+    border: 2px solid transparent;
+    border-radius: var(--media-radius);
+    overflow: hidden;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+    position: relative;
+  }
+
+  .thumbnail-item.active .thumbnail-btn {
+    border-color: #333;
+  }
+
+  .thumbnail-btn:hover {
+    border-color: #666;
+  }
+
+  .thumbnail-media {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: var(--media-preview-ratio, 1);
+    overflow: hidden;
+    border-radius: calc(var(--media-radius) - 2px);
+  }
+
+  .thumbnail-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Mobile responsive */
+  @media screen and (max-width: 749px) {
+    .product-media-gallery--main-with-thumbnails {
+      gap: 15px;
+    }
+
+    .thumbnail-nav-btn {
+      width: 35px;
+      height: 35px;
+    }
+
+    .thumbnail-carousel-container {
+      gap: 10px;
+    }
+  }
+
+  /* Hide nav buttons when not enough items */
+  .thumbnail-carousel-container[data-items-count="1"] .thumbnail-nav-btn,
+  .thumbnail-carousel-container[data-items-count="2"] .thumbnail-nav-btn,
+  .thumbnail-carousel-container[data-items-count="3"] .thumbnail-nav-btn {
+    display: none;
+  }
+
+  @media screen and (max-width: 480px) {
+    .thumbnail-carousel-container[data-items-count="4"] .thumbnail-nav-btn {
+      display: none;
+    }
   }
 {% endstylesheet %}

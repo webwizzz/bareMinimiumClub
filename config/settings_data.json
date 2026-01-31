@@ -33,6 +33,70 @@
     "card_corner_radius": 10,
     "variant_button_radius": 100,
     "variant_button_width": "default-width-buttons",
+    "sections": {
+      "change_font": {
+        "type": "change_font",
+        "blocks": {
+          "font_cMf9jT": {
+            "type": "font",
+            "settings": {
+              "name": "snellBT",
+              "custom_font_url": "https://cdn.shopify.com/s/files/1/0803/8514/7100/files/SnellBT-Bold.otf?v=1769839920",
+              "custom_font_weight": "400",
+              "custom_font_style": "normal",
+              "apply_h1": false,
+              "apply_h2": false,
+              "apply_h3": false,
+              "apply_h4": false,
+              "apply_h5": false,
+              "apply_h6": false,
+              "apply_p": false,
+              "apply_a": false,
+              "apply_li": false,
+              "apply_ul": false,
+              "apply_ol": false,
+              "apply_span": false,
+              "apply_div": false,
+              "apply_button": false,
+              "apply_input": false,
+              "custom_selector": ""
+            }
+          },
+          "font_kUgTRT": {
+            "type": "font",
+            "settings": {
+              "name": "satoshi",
+              "custom_font_url": "https://cdn.shopify.com/s/files/1/0803/8514/7100/files/Satoshi-Regular.otf?v=1769839991",
+              "custom_font_weight": "400",
+              "custom_font_style": "normal",
+              "apply_h1": true,
+              "apply_h2": true,
+              "apply_h3": true,
+              "apply_h4": true,
+              "apply_h5": true,
+              "apply_h6": true,
+              "apply_p": true,
+              "apply_a": true,
+              "apply_li": true,
+              "apply_ul": true,
+              "apply_ol": true,
+              "apply_span": true,
+              "apply_div": true,
+              "apply_button": true,
+              "apply_input": true,
+              "custom_selector": ""
+            }
+          }
+        },
+        "block_order": [
+          "font_cMf9jT",
+          "font_kUgTRT"
+        ],
+        "settings": {
+          "enable": true
+        }
+      }
+    },
     "content_for_index": [],
     "color_schemes": {
       "scheme-1": {

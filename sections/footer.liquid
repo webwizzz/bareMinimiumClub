@@ -1,254 +1,301 @@
+<style>
+  /* =========================
+     Base footer styles
+  ========================== */
+  #shopify-section-{{ section.id }} .bm-footer {
+    padding-top: {{ section.settings.footer_padding_top }}px;
+    padding-bottom: {{ section.settings.footer_padding_bottom }}px;
+    background-color: #ffffff;
+    width: 100%;
+    box-sizing: border-box;
+    border-top: {{ section.settings.footer_border_width }}px solid {{ section.settings.footer_border_color }};
+  }
 
+  /* If your theme doesn't define bm-container, this ensures sane default */
+  #shopify-section-{{ section.id }} .bm-container{
+    /* Make content full-bleed footer with inner 36px side gutters */
+    max-width: none;
+    margin: 0 36px;
+    width: calc(100% - 72px);
+    padding-left: 36px;
+    padding-right: 36px;
+    box-sizing: border-box;
+  
+  }
 
-<div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<div
-  class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
->
-  {% liquid
-    assign total_blocks = section.blocks.size
+  /* =========================
+     Layout (matches your mock)
+  ========================== */
+  #shopify-section-{{ section.id }} .bm-footer__grid {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: {{ section.settings.footer_grid_gap }}px;
+    margin-bottom: {{ section.settings.footer_grid_margin }}px;
+  }
 
-    # Grid layout calculations
-    assign grid_columns = total_blocks | at_most: 4
+  #shopify-section-{{ section.id }} .bm-footer__cols {
+    display: flex;
+    align-items: flex-start;
+    gap: {{ section.settings.footer_cols_gap }}px;
+  }
 
-    # Calculate last row counts using modulo arithmetic
-    # last_row_count = (total_blocks - 1) % N + 1
-    assign last_row_count = total_blocks | minus: 1 | modulo: 4 | plus: 1
-    assign tablet_last_row_count = total_blocks | minus: 1 | modulo: 2 | plus: 1
+  #shopify-section-{{ section.id }} .bm-footer h4 {
+    font-size: {{ section.settings.footer_heading_size }}px;
+    color: {{ section.settings.footer_heading_color }};
+    margin: 0 0 {{ section.settings.footer_heading_margin }}px 0;
+    font-weight: 700;
+  }
 
-    # Check if there are orphaned elements (single item in last row)
-    assign has_isolated_grid_item_desktop = false
-    assign has_isolated_grid_item_tablet = false
+  #shopify-section-{{ section.id }} .bm-footer__cols a {
+    display: block; /* important so margin-bottom works and links stack */
+    font-size: {{ section.settings.footer_link_size }}px;
+    color: {{ section.settings.footer_link_color }};
+    margin-bottom: {{ section.settings.footer_link_spacing }}px;
+    text-decoration: none;
+    line-height: 1.2;
+  }
 
-    if total_blocks > 4 and last_row_count == 1
-      assign has_isolated_grid_item_desktop = true
-    endif
+  #shopify-section-{{ section.id }} .bm-footer__cols a:hover {
+    text-decoration: underline;
+  }
 
-    if total_blocks == 5
-      assign has_isolated_grid_item_tablet = true
-    endif
-  %}
-  <div
-    class="
-      footer-content
-      spacing-style
-      {% if has_isolated_grid_item_desktop %}footer-content--isolated-grid-item-desktop{% endif %}
-      {% if has_isolated_grid_item_tablet %}footer-content--isolated-grid-item-tablet{% endif %}
-    "
-    style="
-      {%  render 'spacing-style', settings: section.settings %}
-      --footer-gap: {{ section.settings.gap }}px;
-      --grid-columns: {{ grid_columns }};
-      --last-row-count: {{ last_row_count }};
-      --tablet-last-row-count: {{ tablet_last_row_count }};
-    "
-  >
-    {% content_for 'blocks' %}
+  /* Logo (desktop/default) */
+  #shopify-section-{{ section.id }} .bm-footer__logo img {
+    width: {{ section.settings.logo_width }}px;
+    height: auto;
+    max-height: {{ section.settings.logo_max_height }}px;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* Copyright row */
+  #shopify-section-{{ section.id }} .bm-footer__copyright {
+    font-size: {{ section.settings.copyright_size }}px;
+    color: {{ section.settings.copyright_color }};
+    padding-top: {{ section.settings.copyright_padding_top }}px;
+    margin-top: {{ section.settings.copyright_margin_top }}px;
+    font-weight: {% if section.settings.copyright_bold %}700{% else %}400{% endif %};
+  }
+
+  /* =========================
+     Mobile tweaks
+  ========================== */
+  @media (max-width: {{ section.settings.mobile_breakpoint }}px) {
+
+  /* Make the whole footer compact like your Figma */
+  #shopify-section-{{ section.id }} .bm-footer{
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
+
+  /* Reduce container side padding on mobile */
+  #shopify-section-{{ section.id }} .bm-container{
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  /* Keep links left + logo right (no wrapping) */
+  #shopify-section-{{ section.id }} .bm-footer__grid{
+    flex-wrap: nowrap !important;
+    align-items: flex-start;
+    gap: 18px !important;
+    margin-bottom: 8px !important; /* smaller gap before copyright */
+  }
+
+  #shopify-section-{{ section.id }} .bm-footer__cols{
+    gap: 28px !important;
+  }
+
+  /* Tight typography like the mock */
+  #shopify-section-{{ section.id }} .bm-footer h4{
+    font-size: 10px !important;
+    margin: 0 0 6px 0 !important;
+    line-height: 1.05 !important;
+  }
+
+  #shopify-section-{{ section.id }} .bm-footer__cols a{
+    font-size: 12px !important;
+    margin-bottom: 4px !important;
+    line-height: 1.15 !important;
+  }
+
+  /* Mobile logo size (your figma) */
+  #shopify-section-{{ section.id }} .bm-footer__logo img{
+    width: {{ section.settings.mobile_logo_width }}px !important;
+    max-height: {{ section.settings.mobile_logo_max_height }}px !important;
+  }
+
+  /* Copyright: no big top spacing; bold like your screenshot */
+  #shopify-section-{{ section.id }} .bm-footer__copyright{
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    font-size: 8px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+  }
+}
+
+  }
+</style>
+
+<footer class="bm-footer">
+  <div class="bm-container">
+    <div class="bm-footer__grid">
+      <div class="bm-footer__cols">
+        <div>
+          <h4>{{ section.settings.quick_links_heading }}</h4>
+
+          {% assign footer_menu = linklists['footer'] %}
+          {% if footer_menu and footer_menu.links.size > 0 %}
+            {% for link in footer_menu.links %}
+              {% if link.links.size > 0 %}
+                {% comment %}If this is a parent menu item like "Quick Links", show its children{% endcomment %}
+                {% for child_link in link.links %}
+                  <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+                {% endfor %}
+              {% else %}
+                {% comment %}Otherwise show the link itself{% endcomment %}
+                <a href="{{ link.url }}">{{ link.title }}</a>
+              {% endif %}
+            {% endfor %}
+          {% elsif section.settings.quick_menu != blank %}
+            {% for link in section.settings.quick_menu.links %}
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            {% endfor %}
+          {% else %}
+            <a href="/pages/contact">Contact Us</a>
+            <a href="/policies/refund-policy">Returns and Refunds</a>
+            <a href="/policies/privacy-policy">Policies</a>
+            <a href="/policies/shipping-policy">Delivery</a>
+            <a href="/policies/terms-of-service">Press</a>
+          {% endif %}
+        </div>
+
+        <div>
+          <h4>{{ section.settings.follow_us_heading }}</h4>
+
+          {% if section.settings.follow_menu != blank %}
+            {% for link in section.settings.follow_menu.links %}
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            {% endfor %}
+          {% else %}
+            <a href="#">Youtube</a>
+            <a href="#">Instagram</a>
+            <a href="#">Email</a>
+            <a href="#">Phone</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="bm-footer__logo" aria-label="Footer logo">
+        {% if section.settings.footer_logo != blank %}
+          <img
+            src="{{ section.settings.footer_logo | image_url: width: 600 }}"
+            alt="{{ shop.name | escape }}"
+            loading="lazy"
+          >
+        {% elsif settings.footer_mark != blank %}
+          <img
+            src="{{ settings.footer_mark | image_url: width: 900 }}"
+            alt="Mark"
+            loading="lazy"
+          >
+        {% else %}
+          <div style="width: {{ section.settings.logo_width }}px; height: 180px; border: 1px dashed #ddd; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 12px;">
+            Logo
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="bm-footer__copyright">
+      {% if section.settings.copyright_text != blank %}
+        {{ section.settings.copyright_text }}
+      {% else %}
+        Copyright {{ 'now' | date: '%Y' }} The Bare Minimum Club.
+      {% endif %}
+      {% if section.settings.show_powered_by %}
+        Powered by Shopify
+      {% endif %}
+    </div>
   </div>
-</div>
-
-{% stylesheet %}
-  .footer-content {
-    contain: content;
-    content-visibility: auto;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--footer-gap);
-  }
-
-  @media screen and (min-width: 750px) and (max-width: 989px) {
-    .footer-content {
-      grid-template-columns: repeat(min(var(--grid-columns), 3), 1fr);
-      grid-auto-flow: row;
-    }
-
-    .footer-content[style*='--grid-columns: 4'] {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .footer-content--isolated-grid-item-tablet > :last-child {
-      grid-column: 1 / -1;
-    }
-  }
-
-  @media screen and (min-width: 990px) {
-    .footer-content {
-      grid-template-columns: repeat(var(--grid-columns), 1fr);
-    }
-
-    /* Single item centered */
-    .footer-content[style*='--grid-columns: 1'] {
-      justify-items: center;
-    }
-
-    .footer-content--isolated-grid-item-desktop > :last-child {
-      grid-column: 1 / -1;
-    }
-  }
-{% endstylesheet %}
+</footer>
 
 {% schema %}
 {
-  "name": "t:names.footer",
-  "class": "section-wrapper",
-  "tag": "footer",
-  "blocks": [
-    {
-      "type": "_divider"
-    },
-    {
-      "type": "@app"
-    },
-    {
-      "type": "button"
-    },
-    {
-      "type": "follow-on-shop"
-    },
-    {
-      "type": "group"
-    },
-    {
-      "type": "icon"
-    },
-    {
-      "type": "image"
-    },
-    {
-      "type": "menu"
-    },
-    {
-      "type": "payment-icons"
-    },
-    {
-      "type": "text"
-    },
-    {
-      "type": "logo"
-    },
-    {
-      "type": "jumbo-text"
-    },
-    {
-      "type": "social-links"
-    },
-    {
-      "type": "email-signup"
-    }
-  ],
-  "enabled_on": {
-    "groups": ["footer"]
-  },
+  "name": "Footer",
+  "tag": "section",
   "settings": [
     {
-      "type": "select",
-      "id": "section_width",
-      "label": "t:settings.width",
-      "options": [
-        {
-          "value": "page-width",
-          "label": "t:options.page"
-        },
-        {
-          "value": "full-width",
-          "label": "t:options.full"
-        }
-      ],
-      "default": "page-width"
+      "type": "header",
+      "content": "Footer Spacing"
     },
-    {
-      "type": "range",
-      "id": "gap",
-      "label": "t:settings.gap",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 0
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:settings.color_scheme",
-      "default": "scheme-1"
-    },
+    {"type": "range", "id": "footer_padding_top", "label": "Footer padding top", "min": 20, "max": 200, "step": 4, "unit": "px", "default": 80},
+    {"type": "range", "id": "footer_padding_bottom", "label": "Footer padding bottom", "min": 20, "max": 200, "step": 4, "unit": "px", "default": 40},
+    {"type": "color", "id": "footer_border_color", "label": "Footer border color", "default": "#e6e6e6"},
+    {"type": "range", "id": "footer_border_width", "label": "Top border width", "min": 0, "max": 10, "step": 1, "unit": "px", "default": 1},
+    {"type": "range", "id": "footer_grid_margin", "label": "Footer grid bottom margin", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 24},
+
     {
       "type": "header",
-      "content": "t:content.padding"
+      "content": "Layout"
     },
+    {"type": "range", "id": "footer_grid_gap", "label": "Grid gap (desktop)", "min": 0, "max": 80, "step": 2, "unit": "px", "default": 40},
+    {"type": "range", "id": "footer_cols_gap", "label": "Columns gap (desktop)", "min": 0, "max": 80, "step": 2, "unit": "px", "default": 50},
+
     {
-      "type": "range",
-      "id": "padding-block-start",
-      "label": "t:settings.top",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 20
+      "type": "header",
+      "content": "Footer Logo"
     },
+    {"type": "image_picker", "id": "footer_logo", "label": "Footer logo image"},
+    {"type": "range", "id": "logo_width", "label": "Logo width (desktop)", "min": 40, "max": 400, "step": 5, "unit": "px", "default": 120},
+    {"type": "range", "id": "logo_max_height", "label": "Logo max height (desktop)", "min": 40, "max": 400, "step": 5, "unit": "px", "default": 140},
+
     {
-      "type": "range",
-      "id": "padding-block-end",
-      "label": "t:settings.bottom",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 20
-    }
+      "type": "header",
+      "content": "Mobile Logo Sizing"
+    },
+    {"type": "range", "id": "mobile_breakpoint", "label": "Mobile breakpoint", "min": 600, "max": 900, "step": 5, "unit": "px", "default": 750},
+    {"type": "range", "id": "mobile_logo_width", "label": "Logo width (mobile)", "min": 40, "max": 180, "step": 2, "unit": "px", "default": 96},
+    {"type": "range", "id": "mobile_logo_max_height", "label": "Logo max height (mobile)", "min": 60, "max": 200, "step": 2, "unit": "px", "default": 110},
+    {"type": "range", "id": "mobile_footer_grid_gap", "label": "Grid gap (mobile)", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 20},
+    {"type": "range", "id": "mobile_footer_cols_gap", "label": "Columns gap (mobile)", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 30},
+
+    {
+      "type": "header",
+      "content": "Footer Menus"
+    },
+    {"type": "text", "id": "quick_links_heading", "label": "Quick Links heading", "default": "Quick Links"},
+    {"type": "text", "id": "follow_us_heading", "label": "Follow Us heading", "default": "Follow Us"},
+    {"type": "link_list", "id": "quick_menu", "label": "Quick Links menu"},
+    {"type": "link_list", "id": "follow_menu", "label": "Follow Us menu"},
+
+    {
+      "type": "header",
+      "content": "Footer Text Styling"
+    },
+    {"type": "range", "id": "footer_heading_size", "label": "Footer heading size", "min": 10, "max": 32, "step": 1, "unit": "px", "default": 10},
+    {"type": "color", "id": "footer_heading_color", "label": "Footer heading color", "default": "#000000"},
+    {"type": "range", "id": "footer_heading_margin", "label": "Heading margin bottom", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 8},
+    {"type": "range", "id": "footer_link_size", "label": "Footer link size", "min": 8, "max": 24, "step": 1, "unit": "px", "default": 18},
+    {"type": "color", "id": "footer_link_color", "label": "Footer link color", "default": "#000000"},
+    {"type": "range", "id": "footer_link_spacing", "label": "Space between links", "min": 0, "max": 30, "step": 1, "unit": "px", "default": 4},
+
+    {
+      "type": "header",
+      "content": "Copyright"
+    },
+    {"type": "text", "id": "copyright_text", "label": "Copyright text", "default": "Copyright 2025 The Bare Minimum Club."},
+    {"type": "checkbox", "id": "show_powered_by", "label": "Show “Powered by Shopify”", "default": true},
+    {"type": "checkbox", "id": "copyright_bold", "label": "Make copyright bold", "default": false},
+    {"type": "range", "id": "copyright_size", "label": "Copyright text size", "min": 8, "max": 20, "step": 1, "unit": "px", "default": 8},
+    {"type": "color", "id": "copyright_color", "label": "Copyright text color", "default": "#000000"},
+    {"type": "range", "id": "copyright_padding_top", "label": "Copyright padding top", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 18},
+    {"type": "range", "id": "copyright_margin_top", "label": "Copyright margin top", "min": 0, "max": 80, "step": 2, "unit": "px", "default": 0}
   ],
   "presets": [
-    {
-      "name": "t:names.footer",
-      "category": "t:categories.footer",
-      "settings": {
-        "gap": 20,
-        "color_scheme": "scheme-1",
-        "padding-block-start": 36,
-        "padding-block-end": 36
-      },
-      "blocks": {
-        "newsletter-group": {
-          "type": "group",
-          "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "gap": 6,
-            "width": "fill",
-            "inherit_color_scheme": true
-          },
-          "blocks": {
-            "newsletter-heading": {
-              "type": "text",
-              "settings": {
-                "text": "t:html_defaults.join_our_email_list",
-                "width": "100%",
-                "alignment": "left",
-                "type_preset": "h3"
-              }
-            },
-            "newsletter-text": {
-              "type": "text",
-              "settings": {
-                "text": "t:html_defaults.get_exclusive_deals_and_early_access_to_new_products",
-                "width": "100%",
-                "alignment": "left",
-                "type_preset": "rte"
-              }
-            }
-          },
-          "block_order": ["newsletter-heading", "newsletter-text"]
-        },
-        "newsletter-form": {
-          "type": "email-signup",
-          "settings": {
-            "width": "fill"
-          }
-        }
-      },
-      "block_order": ["newsletter-group", "newsletter-form"]
-    }
+    { "name": "Footer" }
   ]
 }
 {% endschema %}

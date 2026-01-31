@@ -367,18 +367,19 @@
   .product-form-buttons {
     display: flex;
     flex-wrap: wrap;
+    gap: 12px;
   }
 
   .product-form-buttons:not(:has(.quantity-rules)) {
-    gap: calc(var(--gap-sm) / 2);
+    gap: 12px;
 
     @media screen and (min-width: 750px) {
-      gap: var(--gap-sm);
+      gap: 12px;
     }
   }
 
   .product-form-buttons > *:not(.quantity-selector-wrapper, .quantity-rules, .quantity-label, .volume-pricing) {
-    flex: 1 1 var(--buy-button-preferred-width, 0);
+    flex: 1 1 calc(50% - 6px);
     min-width: fit-content;
   }
 
@@ -392,10 +393,85 @@
     padding-block: var(--padding-lg);
   }
 
+  /* Quantity selector - full width layout */
+  .product-form-buttons .quantity-selector-wrapper {
+    flex: 1 0 100%;
+    width: 100%;
+    order: -1;
+  }
+
   .quantity-selector {
-    flex-grow: 0;
-    flex-shrink: 0;
-    height: var(--height-buy-buttons);
+    display: flex;
+    width: 100%;
+    height: var(--height-buy-buttons, 56px);
+    border: 1px solid var(--color-border, #e0e0e0);
+    border-radius: var(--border-radius, 4px);
+  }
+
+  .quantity-selector button {
+    flex: 0 0 auto;
+    width: 60px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .quantity-selector button:first-of-type {
+    border-right: 1px solid var(--color-border, #e0e0e0);
+  }
+
+  .quantity-selector button:last-of-type {
+    border-left: 1px solid var(--color-border, #e0e0e0);
+  }
+
+  .quantity-selector input {
+    flex: 1;
+    text-align: center;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    -moz-appearance: textfield;
+  }
+
+  .quantity-selector input::-webkit-outer-spin-button,
+  .quantity-selector input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Add to Cart button - outline style */
+  .add-to-cart-button,
+  .product-form-buttons .button-secondary {
+    background-color: transparent;
+    border: 1px solid var(--color-border, #e0e0e0);
+    color: var(--color-foreground, #000);
+    border-radius: var(--border-radius, 4px);
+  }
+
+  .add-to-cart-button:hover,
+  .product-form-buttons .button-secondary:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  /* Buy Now button - filled gray style */
+  .shopify-payment-button,
+  .shopify-payment-button__button,
+  .shopify-payment-button .shopify-payment-button__button--unbranded {
+    background-color: #e5e5e5 !important;
+    color: #000 !important;
+    border: none !important;
+    border-radius: var(--border-radius, 4px) !important;
+    height: var(--height-buy-buttons, 56px);
+  }
+
+  .shopify-payment-button__button--unbranded:hover {
+    background-color: #d5d5d5 !important;
   }
 
   .quantity-label {
@@ -448,12 +524,15 @@
   }
 
   .add-to-cart-button {
-    height: var(--height-buy-buttons);
+    height: var(--height-buy-buttons, 56px);
     text-transform: var(--button-text-case-primary);
   }
 
   .add-to-cart-button.button-secondary {
     text-transform: var(--button-text-case-secondary);
+    background-color: transparent;
+    border: 1px solid var(--color-border, #e0e0e0);
+    color: var(--color-foreground, #000);
   }
 
   .product-form-text__error {
