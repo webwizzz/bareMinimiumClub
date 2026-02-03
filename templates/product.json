@@ -17,17 +17,24 @@
           "static": true,
           "settings": {
             "media_presentation": "main_with_thumbnails",
+            "media_presentation": "main_with_thumbnails",
             "media_columns": "two",
             "image_gap": 12,
             "large_first_image": true,
             "thumbnails_per_view": 2,
             "thumbnail_size": 150,
             "thumbnail_gap": 0,
+            "thumbnails_per_view": 2,
+            "thumbnail_size": 150,
+            "thumbnail_gap": 0,
             "icons_style": "chevron",
             "slideshow_controls_style": "dots",
             "slideshow_mobile_controls_style": "thumbnails",
+            "slideshow_mobile_controls_style": "thumbnails",
             "thumbnail_position": "bottom",
             "thumbnail_width": 44,
+            "thumbnail_radius": 0,
+            "aspect_ratio": "2/1",
             "thumbnail_radius": 0,
             "aspect_ratio": "2/1",
             "constrain_to_viewport": true,
@@ -69,6 +76,8 @@
             "padding-block-end": 16,
             "padding-inline-start": 36,
             "padding-inline-end": 36
+            "padding-inline-start": 36,
+            "padding-inline-end": 36
           },
           "blocks": {
             "text_GnyQiN": {
@@ -85,6 +94,8 @@
                 "line_height": "loose",
                 "letter_spacing": "loose",
                 "case": "none",
+                "wrap": "nowrap",
+                "color": "var(--color-foreground-heading)",
                 "wrap": "nowrap",
                 "color": "var(--color-foreground-heading)",
                 "background": false,
@@ -104,8 +115,10 @@
                 "show_installments": true,
                 "show_tax_info": true,
                 "type_preset": "custom",
+                "type_preset": "custom",
                 "width": "100%",
                 "alignment": "left",
+                "font": "var(--font-heading--family)",
                 "font": "var(--font-heading--family)",
                 "font_size": "1rem",
                 "line_height": "normal",
@@ -125,6 +138,8 @@
                 "variant_style": "buttons",
                 "show_swatches": false,
                 "alignment": "left",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -417,3 +432,4 @@
     "product_recommendations_7taNdN"
   ]
 }
+
