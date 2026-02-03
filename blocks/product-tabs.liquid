@@ -1,0 +1,171 @@
+{%- comment -%}
+Product information tabs block
+Provides three customizable tab headings and rich text content for each tab.
+{%- endcomment -%}
+
+<div class="product-info-tabs" data-block-id="{{ block.id }}">
+  <div class="pit-tabs" role="tablist" aria-label="Product information tabs">
+    <button type="button" class="pit-tab pit-tab--active" role="tab" aria-selected="true" data-tab="1">{{ block.settings.tab1_heading }}</button>
+    <button type="button" class="pit-tab" role="tab" aria-selected="false" data-tab="2">{{ block.settings.tab2_heading }}</button>
+    <button type="button" class="pit-tab" role="tab" aria-selected="false" data-tab="3">{{ block.settings.tab3_heading }}</button>
+  </div>
+
+  <div class="pit-panels">
+    <div class="pit-panel" data-tab="1" role="tabpanel">{{ block.settings.tab1_content }}</div>
+    <div class="pit-panel" data-tab="2" role="tabpanel" hidden>{{ block.settings.tab2_content }}</div>
+    <div class="pit-panel" data-tab="3" role="tabpanel" hidden>{{ block.settings.tab3_content }}</div>
+  </div>
+</div>
+
+{% stylesheet %}
+.product-info-tabs { border: 1px solid #AAAAAA; border-radius: 6px; background: transparent; }
+.pit-tabs { display:flex; gap:0; margin:0; }
+.pit-tab {
+  flex:1 1 0;
+  background: transparent;
+  border: 1px solid #AAAAAA;
+  border-bottom: none;
+  border-top: none;
+  margin-right: -1px;
+  padding: 12px 16px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  color: var(--color-foreground, #111);
+}
+
+.pit-tab:last-child {
+  border-right: 0;
+}
+
+.pit-tab:first-child {
+  border-left: 0;
+}
+.pit-tab--active {
+  background: var(--color-background, #fff);
+  position: relative;
+  z-index: 2;
+  border-bottom: 1px solid transparent;
+}
+.pit-panels { padding: 12px; border-top: 1px solid #AAAAAA; margin-top: -1px; background: #fff; border-radius: 0 0 6px 6px; }
+.pit-panel { padding: 8px 12px; }
+@media screen and (min-width: 750px) {
+  .pit-tab { padding: 14px 18px; }
+}
+{% endstylesheet %}
+
+{% javascript %}
+(function(){
+  function activateContainer(container, index) {
+    var tabs = container.querySelectorAll('.pit-tab');
+    var panels = container.querySelectorAll('.pit-panel');
+    if (!tabs.length || !panels.length) return;
+    tabs.forEach(function(t, i){
+      var is = i === index;
+      t.classList.toggle('pit-tab--active', is);
+      t.setAttribute('aria-selected', is ? 'true' : 'false');
+      panels[i].hidden = !is;
+    });
+  }
+
+  // Delegate click events so listeners work even if blocks are re-rendered
+  document.addEventListener('click', function(e){
+    var tab = e.target.closest('.pit-tab');
+    if (!tab) return;
+    var container = tab.closest('.product-info-tabs');
+    if (!container) return;
+    var tabs = Array.prototype.slice.call(container.querySelectorAll('.pit-tab'));
+    var index = tabs.indexOf(tab);
+    if (index === -1) return;
+    activateContainer(container, index);
+  }, false);
+
+  // Keyboard navigation (left/right) via delegation
+  document.addEventListener('keydown', function(e){
+    var el = e.target;
+    if (!el.classList || !el.classList.contains('pit-tab')) return;
+    var container = el.closest('.product-info-tabs');
+    if (!container) return;
+    var tabs = Array.prototype.slice.call(container.querySelectorAll('.pit-tab'));
+    var index = tabs.indexOf(el);
+    if (e.key === 'ArrowRight') {
+      var next = (index + 1) % tabs.length;
+      activateContainer(container, next);
+      tabs[next].focus();
+      e.preventDefault();
+    } else if (e.key === 'ArrowLeft') {
+      var prev = (index - 1 + tabs.length) % tabs.length;
+      activateContainer(container, prev);
+      tabs[prev].focus();
+      e.preventDefault();
+    }
+  }, false);
+
+  // If script executes before DOM finishes, ensure first tab is active when ready
+  function initAll() {
+    var containers = document.querySelectorAll('.product-info-tabs');
+    containers.forEach(function(container){
+      var active = container.querySelector('.pit-tab--active');
+      if (active) return;
+      var tabs = container.querySelectorAll('.pit-tab');
+      if (tabs.length) activateContainer(container, 0);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
+  }
+})();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Product tabs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tab1_heading",
+      "label": "Tab 1 heading",
+      "default": "Shipping Details"
+    },
+    {
+      "type": "richtext",
+      "id": "tab1_content",
+      "label": "Tab 1 content",
+      "default": "<p>Orders are processed within 24 hours of being placed</p>"
+    },
+    {
+      "type": "text",
+      "id": "tab2_heading",
+      "label": "Tab 2 heading",
+      "default": "Returns"
+    },
+    {
+      "type": "richtext",
+      "id": "tab2_content",
+      "label": "Tab 2 content",
+      "default": "<p>Returns information goes here.</p>"
+    },
+    {
+      "type": "text",
+      "id": "tab3_heading",
+      "label": "Tab 3 heading",
+      "default": "Size Help"
+    },
+    {
+      "type": "richtext",
+      "id": "tab3_content",
+      "label": "Tab 3 content",
+      "default": "<p>Size help content goes here.</p>"
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Product tabs"
+    }
+  ]
+}
+{% endschema %}
