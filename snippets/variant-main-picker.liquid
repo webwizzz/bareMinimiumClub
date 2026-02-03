@@ -259,6 +259,7 @@
     margin: 0;
     padding: 0;
     border: none;
+    justify-content: space-between;
   }
 
   .variant-option--buttons legend {
@@ -312,7 +313,7 @@
 
   .variant-option__button-label {
     --variant-picker-stroke-color: var(--color-variant-border);
-
+    font-size: 13px;
     cursor: pointer;
     display: flex;
     flex: 0 0 3.25em;
@@ -548,6 +549,12 @@
 
     outline: var(--focus-outline);
     outline-offset: var(--focus-outline-offset);
+  }
+
+  @media screen and (max-width: 750px) {
+    .variant-option__button-label{
+      font-size: 9px
+    }
   }
 
   /* This triggers iOS < 16.4. The outline bug is not recognized as a lack of @supports */

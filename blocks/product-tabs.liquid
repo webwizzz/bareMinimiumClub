@@ -22,16 +22,16 @@ Provides three customizable tab headings and rich text content for each tab.
 .pit-tabs { display:flex; gap:0; margin:0; }
 .pit-tab {
   flex:1 1 0;
+  font-size: 14px;
   background: transparent;
   border: 1px solid #AAAAAA;
   border-bottom: none;
   border-top: none;
   margin-right: -1px;
   padding: 12px 16px;
-  font-weight: 600;
   text-align: center;
   cursor: pointer;
-  color: var(--color-foreground, #111);
+  color: #000;
 }
 
 .pit-tab:last-child {
@@ -47,10 +47,20 @@ Provides three customizable tab headings and rich text content for each tab.
   z-index: 2;
   border-bottom: 1px solid transparent;
 }
+
+/* Ensure the active first/last tabs preserve the rounded corner borders
+   so the box outline appears continuous when a tab is active. */
+.pit-tab--active:first-child {
+  border-top-left-radius: 6px;
+}
+.pit-tab--active:last-child {
+  border-right: 1px solid #AAAAAA;
+  border-top-right-radius: 6px;
+}
 .pit-panels { padding: 12px; border-top: 1px solid #AAAAAA; margin-top: -1px; background: #fff; border-radius: 0 0 6px 6px; }
 .pit-panel { padding: 8px 12px; }
 @media screen and (min-width: 750px) {
-  .pit-tab { padding: 14px 18px; }
+  .pit-tab { padding: 14px 18px; font-size: 16px }
 }
 </style>
 
