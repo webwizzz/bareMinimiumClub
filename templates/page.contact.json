@@ -9,50 +9,26 @@
  */
 {
   "sections": {
-    "contact_us_xeqF6J": {
-      "type": "contact-us",
-      "blocks": {
-        "contact-form": {
-          "type": "contact-form",
-          "static": true,
-          "settings": {
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "submit-button": {
-              "type": "contact-form-submit-button",
-              "static": true,
-              "settings": {
-                "label": "Submit",
-                "style_class": "button",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": []
-        }
-      },
-      "name": "Contact Us",
+    "main": {
+      "type": "main-page",
       "settings": {
-        "left_content": "<h1>CONTACT US</h1><p>To contact customer support for any product information or queries regarding an order, please write to us in the message box below or reach out to us with the respective email address <a href=\"mailto:support@thebareminimumclub.in\" title=\"mailto:support@thebareminimumclub.in\"><strong>support@thebareminimumclub.in</strong></a> or send us a message on respective number <a href=\"tel:+91 828 828 8282\" title=\"tel:+91 828 828 8282\"><strong>+91 828 828 8282</strong></a></p><p><strong>For all business queries, email us at </strong><a href=\"mailto:team@thebareminimumclub.in\" title=\"mailto:team@thebareminimumclub.in\"><strong>team@thebareminimumclub.in</strong></a></p>",
-        "right_heading": ""
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "form": {
+      "type": "contact-form",
+      "settings": {
+        "heading": "",
+        "heading_size": "h1",
+        "color_scheme": "scheme-1",
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     }
   },
   "order": [
-    "contact_us_xeqF6J"
+    "main",
+    "form"
   ]
 }

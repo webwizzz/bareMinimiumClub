@@ -9,132 +9,76 @@
  */
 {
   "sections": {
-    "hero_banner_LV4FQh": {
-      "type": "hero-banner",
-      "name": "Hero banner - custom",
-      "settings": {
-        "desktop_image": "shopify://shop_images/WhatsApp_Image_2026-01-22_at_5.42.58_AM_3.jpg",
-        "mobile_image": "shopify://shop_images/Rectangle_36.png",
-        "heading_line1": "BUILT ON THE",
-        "heading_line2": "Bare Minimum",
-        "tagline": "Minimal Mindset. Maximum Attitude.",
-        "button_text": "Shop now",
-        "button_link": "",
-        "overlay_color": "#ffffff",
-        "overlay_opacity": 0,
-        "text_align": "center"
-      }
-    },
-    "product_list_EDUBdR": {
-      "type": "product-list",
+    "image_banner": {
+      "type": "image-banner",
       "blocks": {
-        "static-header": {
-          "type": "_product-list-content",
-          "disabled": true,
-          "static": true,
+        "heading": {
+          "type": "heading",
           "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "center",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_list_text_qK4EWG": {
-              "type": "_product-list-text",
-              "name": "t:names.collection_title",
-              "settings": {
-                "text": "<h3>Make Your Workspace Yours</h3>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h2",
-                "font": "var(--font-primary--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_list_text_qK4EWG"
-          ]
+            "heading": "Browse our latest products",
+            "heading_size": "h0"
+          }
+        },
+        "button": {
+          "type": "buttons",
+          "settings": {
+            "button_label_1": "Shop all",
+            "button_link_1": "shopify://collections/all",
+            "button_style_secondary_1": true,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
         }
       },
-      "name": "Featured collection",
+      "block_order": [
+        "heading",
+        "button"
+      ],
       "settings": {
-        "product_1": "dummy-shirt",
-        "product_2": "the-dino-mite-club-tee",
-        "product_3": "tshirt-1",
-        "product_4": "tshirt",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 4,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "44cqw",
-        "columns_gap": 12,
-        "rows_gap": 12,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "horizontal_alignment": "center",
-        "gap": 30,
-        "color_scheme": "scheme-1",
-        "padding-block-start": 48,
-        "padding-block-end": 10,
-        "padding-inline-start": 0,
-        "padding-inline-end": 0
+        "image_overlay_opacity": 40,
+        "image_height": "large",
+        "desktop_content_position": "bottom-center",
+        "show_text_box": false,
+        "image_behavior": "none",
+        "desktop_content_alignment": "center",
+        "color_scheme": "scheme-3",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": false,
+        "show_text_below": false
       }
     },
-    "image_text_Wp9rkE": {
-      "type": "image-text",
-      "name": "Image + Text",
+    "featured_collection": {
+      "type": "featured-collection",
       "settings": {
-        "desktop_image": "shopify://shop_images/WhatsApp_Image_2026-01-22_at_5.42.58_AM.jpg",
-        "heading": "BUILT ON THE",
-        "heading_line2": "Bare Minimum",
-        "subheading": "Minimal Mindset. Maximum Attitude.",
-        "alignment": "center"
+        "title": "Featured products",
+        "heading_size": "h2",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "all",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "color_scheme": "scheme-1",
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "enable_desktop_slider": false,
+        "swipe_on_mobile": false,
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "padding_top": 44,
+        "padding_bottom": 36
       }
     }
   },
   "order": [
-    "hero_banner_LV4FQh",
-    "product_list_EDUBdR",
-    "image_text_Wp9rkE"
+    "image_banner",
+    "featured_collection"
   ]
 }
