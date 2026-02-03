@@ -27,7 +27,7 @@
         "logo_max_height": 400,
         "mobile_breakpoint": 750,
         "mobile_logo_width": 96,
-        "mobile_logo_max_height": 110,
+        "mobile_logo_max_height": 200,
         "mobile_footer_grid_gap": 20,
         "mobile_footer_cols_gap": 30,
         "quick_links_heading": "Quick Links",
