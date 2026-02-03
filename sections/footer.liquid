@@ -83,59 +83,67 @@
   ========================== */
   @media (max-width: {{ section.settings.mobile_breakpoint }}px) {
 
-  /* Make the whole footer compact like your Figma */
-  #shopify-section-{{ section.id }} .bm-footer{
-    padding-top: 12px !important;
-    padding-bottom: 12px !important;
-  }
+    /* Make the whole footer compact like your Figma */
+    #shopify-section-{{ section.id }} .bm-footer{
+      padding-top: 24px !important;
+      padding-bottom: 24px !important;
+    }
 
-  /* Reduce container side padding on mobile */
-  #shopify-section-{{ section.id }} .bm-container{
-    padding-left: 14px !important;
-    padding-right: 14px !important;
-  }
+    /* Reduce container side padding on mobile */
+    #shopify-section-{{ section.id }} .bm-container{
+      padding-left: 2px !important;
+      padding-right: 2px !important;
+    }
 
-  /* Keep links left + logo right (no wrapping) */
-  #shopify-section-{{ section.id }} .bm-footer__grid{
-    flex-wrap: nowrap !important;
-    align-items: flex-start;
-    gap: 18px !important;
-    margin-bottom: 8px !important; /* smaller gap before copyright */
-  }
+    /* Keep links left + logo right (no wrapping) */
+    #shopify-section-{{ section.id }} .bm-footer__grid{
+      flex-wrap: nowrap !important;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px !important;
+      margin-bottom: 16px !important;
+    }
 
-  #shopify-section-{{ section.id }} .bm-footer__cols{
-    gap: 28px !important;
-  }
+    /* Stack Quick Links and Follow Us vertically on mobile */
+    #shopify-section-{{ section.id }} .bm-footer__cols{
+      flex-direction: column !important;
+      gap: 24px !important;
+    }
 
-  /* Tight typography like the mock */
-  #shopify-section-{{ section.id }} .bm-footer h4{
-    font-size: 10px !important;
-    margin: 0 0 6px 0 !important;
-    line-height: 1.05 !important;
-  }
+    /* Position logo at bottom right */
+    #shopify-section-{{ section.id }} .bm-footer__logo{
+      align-self: flex-end !important;
+    }
 
-  #shopify-section-{{ section.id }} .bm-footer__cols a{
-    font-size: 12px !important;
-    margin-bottom: 4px !important;
-    line-height: 1.15 !important;
-  }
+    /* Typography for headings */
+    #shopify-section-{{ section.id }} .bm-footer h4{
+      font-size: 14px !important;
+      margin: 0 0 12px 0 !important;
+      line-height: 1.2 !important;
+      font-weight: 600 !important;
+    }
 
-  /* Mobile logo size (your figma) */
-  #shopify-section-{{ section.id }} .bm-footer__logo img{
-    width: {{ section.settings.mobile_logo_width }}px !important;
-    max-height: {{ section.settings.mobile_logo_max_height }}px !important;
-  }
+    /* Typography for links */
+    #shopify-section-{{ section.id }} .bm-footer__cols a{
+      font-size: 16px !important;
+      margin-bottom: 8px !important;
+      line-height: 1.4 !important;
+    }
 
-  /* Copyright: no big top spacing; bold like your screenshot */
-  #shopify-section-{{ section.id }} .bm-footer__copyright{
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-    font-size: 8px !important;
-    font-weight: 700 !important;
-    line-height: 1.2 !important;
-  }
-}
+    /* Mobile logo size */
+    #shopify-section-{{ section.id }} .bm-footer__logo img{
+      width: {{ section.settings.mobile_logo_width | plus: 100 }}px !important;
+      max-height: {{ section.settings.mobile_logo_max_height | plus: 100 }}px !important;
+    }
 
+    /* Copyright styling */
+    #shopify-section-{{ section.id }} .bm-footer__copyright{
+      margin-top: 8px !important;
+      padding-top: 0 !important;
+      font-size: 10px !important;
+      font-weight: 600 !important;
+      line-height: 1.2 !important;
+    }
   }
 </style>
 

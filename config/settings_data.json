@@ -12,6 +12,7 @@
     "logo": "shopify://shop_images/The_Bare_Minimum_Club_without_mascot_1.png",
     "logo_height": 100,
     "logo_height_mobile": 28,
+    "favicon": "shopify://shop_images/The_Bare_Minimum_Club_mascot.png",
     "type_body_font": "instrument_sans_n4",
     "type_subheading_font": "instrument_sans_n4",
     "type_heading_font": "instrument_serif_n4",
@@ -116,8 +117,8 @@
         "settings": {
           "background": "#ffffff",
           "foreground_heading": "#000000",
-          "foreground": "#122443",
-          "primary": "#122443",
+          "foreground": "#000000",
+          "primary": "#000000",
           "primary_hover": "#000000",
           "border": "#122443",
           "shadow": "#000000",
