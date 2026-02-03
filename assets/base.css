@@ -56,7 +56,7 @@ select {
 }
 
 input:hover {
-  background-color: var(--color-input-hover-background);
+  border-color: var(--color-input-hover-background);
 }
 
 /** override ios and firefox defaults */
@@ -2227,6 +2227,10 @@ deferred-media[class] :is(.deferred-media__poster-button img, .deferred-media__p
   }
 }
 
+.price{
+  font-weight: bolder;
+}
+
 .price,
 .compare-at-price,
 .unit-price {
@@ -2411,7 +2415,7 @@ product-price.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6) > *:not(.tax-note) {
 .border-style {
   border-width: var(--border-width);
   border-style: var(--border-style);
-  border-color: var(--border-color);
+  border-color: #AAAAAA;
   border-radius: var(--border-radius);
 }
 
@@ -2734,7 +2738,7 @@ product-price.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6) > *:not(.tax-note) {
   align-items: center;
   color: var(--color-input-text);
   background-color: var(--color-input-background);
-  border: var(--style-border-width-inputs) solid var(--color-input-border);
+  border: 1.4px solid #AAAAAA;
   border-radius: var(--style-border-radius-inputs);
   flex: 1 1 var(--quantity-selector-width);
   align-self: stretch;

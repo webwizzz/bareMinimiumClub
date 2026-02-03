@@ -67,36 +67,10 @@
             "border_radius": 0,
             "padding-block-start": 32,
             "padding-block-end": 16,
-            "padding-inline-start": 36,
-            "padding-inline-end": 36
+            "padding-inline-start": 12,
+            "padding-inline-end": 0
           },
           "blocks": {
-            "text_GnyQiN": {
-              "type": "text",
-              "name": "t:names.title",
-              "settings": {
-                "text": "<h1>{{ closest.product.title }}</h1>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "custom",
-                "font": "var(--font-heading--family)",
-                "font_size": "2rem",
-                "line_height": "loose",
-                "letter_spacing": "loose",
-                "case": "none",
-                "wrap": "nowrap",
-                "color": "var(--color-foreground-heading)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
             "price_a7krng": {
               "type": "price",
               "settings": {
@@ -174,8 +148,8 @@
                 "icon": "caret",
                 "dividers": true,
                 "type_preset": "h6",
-                "inherit_color_scheme": true,
-                "color_scheme": "",
+                "inherit_color_scheme": false,
+                "color_scheme": "scheme-1",
                 "border": "solid",
                 "border_width": 1,
                 "border_opacity": 100,
@@ -245,7 +219,6 @@
             }
           },
           "block_order": [
-            "text_GnyQiN",
             "price_a7krng",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
@@ -417,4 +390,3 @@
     "product_recommendations_7taNdN"
   ]
 }
-
