@@ -1,0 +1,72 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "collection_page_banner_gAxFFY": {
+      "type": "collection-page-banner",
+      "name": "Collection page banner",
+      "settings": {
+        "image": "shopify://shop_images/Rectangle_35.png",
+        "image_alt": ""
+      }
+    },
+    "product_banners_r3hYeF": {
+      "type": "product-banners",
+      "name": "Product banners",
+      "settings": {
+        "left_image": "shopify://shop_images/Dinomitewebsiteimages4_jpg.jpg",
+        "left_image_alt": "",
+        "center_product": "the-dino-mite-club-tee",
+        "right_image": "shopify://shop_images/Dinomitewebsiteimages2_jpg.jpg",
+        "right_image_alt": ""
+      }
+    },
+    "product_banners_rR6Qpt": {
+      "type": "product-banners",
+      "name": "Product banners",
+      "settings": {
+        "left_image": "shopify://shop_images/Flyingfuckwebsiteimages4_jpg.jpg",
+        "left_image_alt": "",
+        "center_product": "tshirt",
+        "right_image": "shopify://shop_images/Flyingfuckwebsiteimages3_jpg.jpg",
+        "right_image_alt": ""
+      }
+    },
+    "product_banners_hJhHBk": {
+      "type": "product-banners",
+      "name": "Product banners",
+      "settings": {
+        "left_image": "shopify://shop_images/EYG03_jpg.jpg",
+        "left_image_alt": "",
+        "center_product": "dummy-shirt",
+        "right_image": "shopify://shop_images/EYG02_jpg.jpg",
+        "right_image_alt": ""
+      }
+    },
+    "product_banners_aUBqhm": {
+      "type": "product-banners",
+      "name": "Product banners",
+      "settings": {
+        "left_image": "shopify://shop_images/Wedidthemathwebsite4_jpg.jpg",
+        "left_image_alt": "",
+        "center_product": "tshirt-1",
+        "right_image": "shopify://shop_images/Wedidthemathwebsite3_jpg.jpg",
+        "right_image_alt": ""
+      }
+    }
+  },
+  "order": [
+    "collection_page_banner_gAxFFY",
+    "product_banners_r3hYeF",
+    "product_banners_rR6Qpt",
+    "product_banners_hJhHBk",
+    "product_banners_aUBqhm"
+  ]
+}

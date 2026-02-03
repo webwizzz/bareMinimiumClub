@@ -61,8 +61,11 @@
             ref="fieldsets[]"
             {{ option_id_attribute }}
           >
-            <legend>
-              {{ product_option.name | escape -}}
+            <legend class="variant-option__legend">
+              <span class="variant-option__name">{{ product_option.name | escape }}</span>
+              {%- if product_option.name | downcase contains 'size' -%}
+                <button type="button" class="size-chart-trigger" aria-expanded="false" data-target="size-chart-{{ section.id }}">Size chart</button>
+              {%- endif %}
               {%- if variant_style == 'swatch' -%}
                 <span class="variant-option__swatch-value">{{ product_option.selected_value }}</span>
               {%- endif %}
@@ -140,6 +143,36 @@
               {% endstyle %}
             {% endif %}
           </fieldset>
+          {%- if product_option.name | downcase contains 'size' -%}
+            <div id="size-chart-{{ section.id }}" class="size-chart-drawer" hidden aria-hidden="true">
+              <div class="size-chart-drawer__inner">
+                <div class="size-chart-drawer__header">
+                  <h4>SIZE CHART</h4>
+                  <button type="button" class="size-chart-drawer__close" aria-label="Close size chart">✕</button>
+                </div>
+                <div class="size-chart-drawer__content">
+                  <table class="size-chart-table">
+                    <thead>
+                      <tr>
+                        <th>SIZE</th>
+                        <th>WAIST</th>
+                        <th>HIP</th>
+                        <th>LENGTH</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>XS</td><td>25</td><td>32</td><td>14</td></tr>
+                      <tr><td>S</td><td>27</td><td>34</td><td>14</td></tr>
+                      <tr><td>M</td><td>29</td><td>36</td><td>14.5</td></tr>
+                      <tr><td>L</td><td>31</td><td>38</td><td>15</td></tr>
+                      <tr><td>XL</td><td>33</td><td>40</td><td>15.5</td></tr>
+                    </tbody>
+                  </table>
+                  <p class="size-chart-note"><strong>NOTE:</strong><br/>All sizes are in inches. All the measurements are taken by hand, please consider a tolerance of 0.5 inches. The sizes mentioned above are of the garment.</p>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
         {%- elsif block_settings.variant_style == 'dropdowns' -%}
           {%
             # There is an opportunity to build a custom select component that will allow us to style the select element further (animation for dropdown, swatches shown in the dropdown options, etc)
@@ -697,3 +730,48 @@
     justify-content: right;
   }
 </style>
+
+<style>
+  /* Size chart drawer styles */
+  .size-chart-drawer{
+    border: 1px solid #e0e0e0;
+    background: #fff;
+    padding: 0;
+    margin-top: 12px;
+    width: 100%;
+  }
+  .size-chart-drawer__inner{ padding: 28px; }
+  .size-chart-drawer__header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px }
+  .size-chart-drawer__header h4{ margin:0; font-size:20px; letter-spacing:1px }
+  .size-chart-drawer__close{ background:transparent; border:0; font-size:20px; cursor:pointer }
+  .size-chart-table{ width:100%; border-collapse:collapse; margin: 12px 0 18px }
+  .size-chart-table th, .size-chart-table td{ border:1px solid #d9d9d9; padding:18px; text-align:center }
+  .size-chart-table thead th{ background:#fafafa; font-weight:600 }
+  .size-chart-note{ font-size:13px; color:#666; margin:0 }
+  .size-chart-trigger{ margin-left:12px; background:transparent; border:0; color:var(--color-primary, #111); cursor:pointer; text-decoration:underline; font-size:13px }
+</style>
+
+<script>
+  document.addEventListener('click', function(e){
+    var t = e.target.closest('.size-chart-trigger');
+    if(t){
+      var id = t.dataset.target;
+      var drawer = document.getElementById(id);
+      if(!drawer) return;
+      var expanded = t.getAttribute('aria-expanded') === 'true';
+      t.setAttribute('aria-expanded', !expanded);
+      if(expanded){ drawer.hidden = true; drawer.setAttribute('aria-hidden','true'); }
+      else { drawer.hidden = false; drawer.setAttribute('aria-hidden','false'); }
+    }
+
+    var c = e.target.closest('.size-chart-drawer__close');
+    if(c){
+      var drawer = c.closest('.size-chart-drawer');
+      if(!drawer) return;
+      drawer.hidden = true; drawer.setAttribute('aria-hidden','true');
+      var id = drawer.id;
+      var trigger = document.querySelector('.size-chart-trigger[data-target="'+id+'"]');
+      if(trigger) trigger.setAttribute('aria-expanded','false');
+    }
+  }, false);
+</script>

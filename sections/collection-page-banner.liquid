@@ -1,0 +1,99 @@
+{%- comment -%}
+Collection page banner
+Static heading text. Only the image is editable in the theme customizer.
+{%- endcomment -%}
+
+<section class="collection-page-banner section" aria-label="Collections banner">
+  <div class="collection-page-banner__inner">
+    <div class="collection-page-banner__media">
+      {% if section.settings.image != blank %}
+        <img src="{{ section.settings.image | img_url: '1600x' }}" alt="{{ section.settings.image_alt | escape }}" class="collection-page-banner__img" loading="lazy" />
+      {% else %}
+        <div class="collection-page-banner__placeholder" aria-hidden="true"></div>
+      {% endif %}
+    </div>
+
+    <div class="collection-page-banner__content">
+      <h2 class="collection-page-banner__title">C<span style="font-family:'snellBT' !important; padding-left: 5px;">O</span>LLECTI<span style="font-family:'snellBT' !important; padding-left: 5px;">O</span>NS</h2>
+    </div>
+  </div>
+</section>
+
+<style>
+  .collection-page-banner__inner {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    margin-inline: auto;
+    padding: 36px 20px;
+  }
+
+  .collection-page-banner__media {
+    flex: 1 1 45%;
+  }
+
+  .collection-page-banner__img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+    object-fit: cover;
+  }
+
+  .collection-page-banner__content {
+    flex: 1 1 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: auto;
+  }
+
+  .collection-page-banner__title {
+    font-size: 72px;
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: 2px;
+    margin: 0;
+    text-transform: uppercase;
+    color: var(--color-foreground-heading, #0b2240);
+  }
+
+  .collection-page-banner__placeholder {
+    width: 100%;
+    padding-top: 66%;
+    background: #f3f4f6;
+    border-radius: 12px;
+  }
+
+  @media (max-width: 900px) {
+    .collection-page-banner__inner { flex-direction: column-reverse; gap: 10px; }
+    .collection-page-banner__media, .collection-page-banner__content { flex: 1 1 100%; margin-right: auto;}
+    .collection-page-banner__title { text-align: left; font-size: 25px; font-weight: 800;}
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collection page banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Banner image",
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "info": "Provide descriptive alt text for accessibility."
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Collection page banner",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}
