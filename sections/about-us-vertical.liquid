@@ -1,0 +1,166 @@
+{% schema %}
+{
+  "name": "About Vertical",
+  "settings": [
+    { "type": "image_picker", "id": "background_image", "label": "Background image (desktop)" },
+    { "type": "image_picker", "id": "background_image_mobile", "label": "Background image (mobile - optional)" },
+
+    { "type": "text", "id": "overlay1_script", "label": "Overlay 1 (script)", "default": "About" },
+    { "type": "select", "id": "overlay1_script_style", "label": "Overlay 1 script style", "options": [ {"value":"italic","label":"Italic"}, {"value":"normal","label":"Normal"} ], "default": "italic" },
+    { "type": "text", "id": "overlay1_heading", "label": "Overlay 1 (heading)", "default": "US" },
+    { "type": "select", "id": "overlay1_heading_style", "label": "Overlay 1 heading style", "options": [ {"value":"italic","label":"Italic"}, {"value":"normal","label":"Normal"} ], "default": "normal" },
+    { "type": "textarea", "id": "overlay1_body", "label": "Overlay 1 body", "default": "The Bare Minimum Club is a\nstreetwear label built on\nsimplicity and intention." },
+
+    { "type": "text", "id": "overlay2_script", "label": "Overlay 2 (script)", "default": "Our" },
+    { "type": "select", "id": "overlay2_script_style", "label": "Overlay 2 script style", "options": [ {"value":"italic","label":"Italic"}, {"value":"normal","label":"Normal"} ], "default": "italic" },
+    { "type": "text", "id": "overlay2_heading", "label": "Overlay 2 (heading)", "default": "PHILOSOPHY" },
+    { "type": "select", "id": "overlay2_heading_style", "label": "Overlay 2 heading style", "options": [ {"value":"italic","label":"Italic"}, {"value":"normal","label":"Normal"} ], "default": "normal" },
+    { "type": "textarea", "id": "overlay2_body", "label": "Overlay 2 body", "default": "Our designs are built around\nthoughtful intent. Every piece\nhas a reason to exist and\nsomething to say." },
+
+    { "type": "text", "id": "overlay3_script", "label": "Overlay 3 (script)", "default": "The" },
+    { "type": "select", "id": "overlay3_script_style", "label": "Overlay 3 script style", "options": [ {"value":"italic","label":"Italic"}, {"value":"normal","label":"Normal"} ], "default": "italic" },
+    { "type": "text", "id": "overlay3_heading", "label": "Overlay 3 (heading)", "default": "COMMUNITY" },
+    { "type": "select", "id": "overlay3_heading_style", "label": "Overlay 3 heading style", "options": [ {"value":"italic","label":"Italic"}, {"value":"normal","label":"Normal"} ], "default": "normal" },
+    { "type": "textarea", "id": "overlay3_body", "label": "Overlay 3 body", "default": "A club for those who don't take life\ntoo seriously, welcome a little chaos,\nand value authenticity over pretense." },
+
+    { "type": "select", "id": "text_align", "label": "Overlay horizontal alignment", "options": [ {"value":"right","label":"Right (default)"}, {"value":"left","label":"Left"}, {"value":"center","label":"Center"} ], "default": "right" }
+  ],
+  "blocks": [],
+  "presets": [ { "name": "About Us Vertical", "category": "Image" } ]
+}
+{% endschema %}
+
+<style>
+.about-us-vertical-section { position: relative; overflow: hidden; }
+/* make the section span 3 viewports so the image visually covers three screens */
+.about-us-vertical-section .v-height { height: calc(100vh * 3); position: relative; }
+
+/* sticky full-viewport background image */
+.about-us-vertical__sticky {
+  position: sticky;
+  top: 0;
+  height: 300vh;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+
+/* overlays positioned so one appears in each viewport as the user scrolls */
+.about-us-vertical__overlay {
+  position: absolute;
+  right: 5%;
+  text-align: right;
+  color: #fff;
+  z-index: 2;
+  display: block;
+  opacity: 1; /* visible by default for no-JS */
+}
+.about-us-vertical-section.js .about-us-vertical__overlay { /* when JS enabled, start hidden and animate in */
+  transform: translateY(12px);
+}
+.about-us-vertical__overlay.in-view { opacity: 1; transform: none; transition: opacity 600ms ease, transform 600ms cubic-bezier(.2,.9,.2,1); }
+.about-us-vertical__overlay .script { color: #fff; line-height: 0.9; font-weight: bolder; }
+.about-us-vertical__overlay .heading { font-weight:800; text-transform: uppercase; letter-spacing: 1px; margin-top: -42px; }
+.about-us-vertical__overlay .body { margin-top: 12px; font-size: 40px; font-weight: 600; line-height: 1.4; white-space: pre-wrap; }
+
+/* style variants controlled by customizer classes */
+.about-us-vertical__overlay .script.script--italic { font-family: 'snellBT' !important; font-size: 200px; }
+.about-us-vertical__overlay .script.script--normal { font-size: 80px; }
+.about-us-vertical__overlay .heading.heading--italic { font-family: 'snellBT' !important; font-size: 200px; }
+.about-us-vertical__overlay .heading.heading--normal { font-size: 80px; }
+
+/* positions: placed roughly in the vertical center of each viewport */
+.about-us-vertical__overlay--1 { top: 12vh; }
+.about-us-vertical__overlay--2 { top: calc(100vh + 12vh); }
+.about-us-vertical__overlay--3 { top: calc(200vh + 12vh); }
+
+/* alignment variants */
+.about-us-vertical--align-left .about-us-vertical__overlay { left: 6%; right: auto; text-align: left; }
+.about-us-vertical--align-center .about-us-vertical__overlay { left: 50%; right: auto; transform: translateX(-50%); }
+
+/* mobile: stack image then overlays as normal flow; avoid sticky behaviour */
+@media (max-width: 749px) {
+    .about-us-vertical-section{
+        height: 200vh;
+        padding-bottom: 24px;
+    }
+  .about-us-vertical .v-height { height: 200vh; }
+  .about-us-vertical__sticky { position: relative; height: 200vh; }
+  .about-us-vertical__sticky img.mobile-only { display: block; width: 100%; height: auto; }
+  .about-us-vertical__overlay {text-align: right; color: #fff; }
+  .about-us-vertical__overlay .script { font-size: 28px; }
+  .about-us-vertical__overlay .script.script--normal { font-size: 40px; }
+  .about-us-vertical__overlay .heading {margin-top: -23px !important;}
+  .about-us-vertical__overlay .heading.heading--normal { font-size: 40px; }
+  .about-us-vertical__overlay .heading.heading--italic{ font-size: 100px;}
+  .about-us-vertical__overlay .script.script--italic{ font-size: 100px;}
+  .about-us-vertical__overlay .body { font-size: 20px; max-width: 360px; margin-left: auto; margin-right: auto; }
+
+  .about-us-vertical__overlay--1 { top: 12vh; }
+    .about-us-vertical__overlay--2 { top: calc(66vh + 12vh); }
+    .about-us-vertical__overlay--3 { top: calc(132vh + 12vh); }
+}
+
+/* ensure readable contrast by adding semi-opaque backdrop when needed (opt-in via setting later) */
+.about-us-vertical__overlay .backdrop { display:block; position:absolute; inset:0; background:rgba(0,0,0,0.18); z-index:-1; border-radius:4px; }
+
+</style>
+
+<section id="about-us-vertical-{{ section.id }}" class="about-us-vertical-section about-us-vertical--align-{{ section.settings.text_align }}">
+  <div class="v-height">
+    {% comment %} Sticky background: use inline style for dynamic image URL {% endcomment %}
+    <div class="about-us-vertical__sticky" style="background-image: url('{{ section.settings.background_image | img_url: '2048x' }}');">
+      <!-- show mobile image if provided (visible only under mobile CSS) -->
+      {% if section.settings.background_image_mobile != blank %}
+        <img class="mobile-only" src="{{ section.settings.background_image_mobile | img_url: '800x' }}" alt="" style="display:none; width:100%; height:auto;">
+      {% endif %}
+    </div>
+
+    <!-- overlays: one per screen; use absolute top offsets so they appear in each viewport while sticky image remains -->
+    <div class="about-us-vertical__overlay about-us-vertical__overlay--1" role="group" aria-label="About us">
+      <div class="script {% if section.settings.overlay1_script_style == 'normal' %}script--normal{% else %}script--italic{% endif %}">{{ section.settings.overlay1_script }}</div>
+      <div class="heading {% if section.settings.overlay1_heading_style == 'normal' %}heading--normal{% else %}heading--italic{% endif %}">{{ section.settings.overlay1_heading }}</div>
+      <div class="body">{{ section.settings.overlay1_body }}</div>
+    </div>
+
+    <div class="about-us-vertical__overlay about-us-vertical__overlay--2" role="group" aria-label="Our philosophy">
+      <div class="script {% if section.settings.overlay2_script_style == 'normal' %}script--normal{% else %}script--italic{% endif %}">{{ section.settings.overlay2_script }}</div>
+      <div class="heading {% if section.settings.overlay2_heading_style == 'normal' %}heading--normal{% else %}heading--italic{% endif %}">{{ section.settings.overlay2_heading }}</div>
+      <div class="body">{{ section.settings.overlay2_body }}</div>
+    </div>
+
+    <div class="about-us-vertical__overlay about-us-vertical__overlay--3" role="group" aria-label="The community">
+      <div class="script {% if section.settings.overlay3_script_style == 'normal' %}script--normal{% else %}script--italic{% endif %}">{{ section.settings.overlay3_script }}</div>
+      <div class="heading {% if section.settings.overlay3_heading_style == 'normal' %}heading--normal{% else %}heading--italic{% endif %}">{{ section.settings.overlay3_heading }}</div>
+      <div class="body">{{ section.settings.overlay3_body }}</div>
+    </div>
+
+  </div>
+
+  {% comment %} IntersectionObserver to reveal overlays smoothly. Progressive enhancement: overlays visible if JS disabled. {% endcomment %}
+  <script>
+    (function(){
+      var section = document.getElementById('about-us-vertical-{{ section.id }}');
+      if(!section) return;
+      // mark JS enabled on this section so CSS can hide initial elements
+      section.classList.add('js');
+
+      var overlays = section.querySelectorAll('.about-us-vertical__overlay');
+      if(!('IntersectionObserver' in window)) {
+        // if no IO, just show overlays
+        overlays.forEach(function(n){ n.classList.add('in-view'); });
+        return;
+      }
+
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if(entry.isIntersecting) entry.target.classList.add('in-view');
+        });
+      }, { root: null, threshold: 0.45 });
+
+      overlays.forEach(function(el){ io.observe(el); });
+    })();
+  </script>
+</section>

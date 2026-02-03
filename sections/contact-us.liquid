@@ -1,0 +1,61 @@
+{% capture contact-form %}
+  {% content_for 'block', type: 'contact-form', id: 'contact-form' %}
+{% endcapture %}
+
+{% schema %}
+{
+  "name": "Contact Us",
+  "settings": [
+    { 
+        "type": "richtext", "id": "left_content", "label": "Left content (rich text)", "default": "<h1>CONTACT US</h1>\n<p>To contact customer support for any product information or queries regarding an order, please write to us in the message box below or reach out to us with the respective email address support@thebareminimumclub.in or send us a message on respective number +91 828 828 8282</p>\n<p><strong>For all business queries, email us at team@thebareminimumclub.in</strong></p>"
+    },
+    {
+        "type": "richtext", "id": "right_heading", "label": "Right heading (above form)", "default": "<p>We'd love to hear from you!</p>"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+.contact-us-section { padding: 150px 0; }
+.contact-us__wrap {max-width: 1150px; margin: 0 auto; display:grid; grid-template-columns: 1fr 520px; gap: 48px; align-items:start; }
+.contact-us__left h1 { font-size: 78px; margin: 0 0 18px; font-weight:800; letter-spacing:2px; }
+.contact-us__left .rte { color:#111; font-size:16px; line-height:1.6; max-width: 95%;}
+.contact-us__left .rte p:last-child { margin-top: 18px; font-weight:600;}
+.contact-us__right { }
+.contact-block { background: transparent; }
+.contact-block--default form { display:flex; flex-direction:column; gap:12px; }
+.contact-block--default input[type="text"], .contact-block--default input[type="email"], .contact-block--default textarea { padding:12px; border:1px solid #e6e6e6; border-radius:6px; font-size:14px; }
+.contact-block--default button { background:#122443; color:#fff; padding:12px 20px; border-radius:6px; border:0; cursor:pointer; }
+
+@media (max-width: 1024px) {
+    .contact-us-section { padding: 50px 0; }
+    .contact-us__left h1{ font-size: 38px;}
+  .contact-us__wrap { grid-template-columns: 1fr 420px; gap: 32px; padding: 0 16px;}
+}
+
+@media (max-width: 749px) {
+    .contact-us-section { padding: 50px 0; }
+    .contact-us__left h1{ font-size: 38px;}
+    .contact-us__left .rte{
+        font-size: 14px;
+        max-width: 100%;
+    }
+  .contact-us__wrap { grid-template-columns: 1fr; padding: 0 16px;}
+  .contact-us__right { order: 2; margin-top: 20px; }
+}
+
+</style>
+
+<section id="contact-us-{{ section.id }}" class="contact-us-section">
+  <div class="contact-us__wrap">
+    <div class="contact-us__left">
+      <div class="rte">{{ section.settings.left_content }}</div>
+    </div>
+
+    <div class="contact-us__right">
+        <p class="rte">{{ section.settings.right_heading }}</p>
+        {{ contact-form  }}
+    </div>
+  </div>
+</section>

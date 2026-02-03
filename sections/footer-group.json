@@ -8,28 +8,49 @@
  * ------------------------------------------------------------
  */
 {
-  "name": "t:sections.footer.name",
   "type": "footer",
+  "name": "t:names.footer",
   "sections": {
-    "footer": {
+    "footer_QAE7jb": {
       "type": "footer",
+      "name": "t:names.footer",
       "settings": {
-        "color_scheme": "scheme-1",
-        "newsletter_enable": true,
-        "newsletter_heading": "Subscribe to our emails",
-        "enable_follow_on_shop": true,
-        "show_social": true,
-        "enable_country_selector": true,
-        "enable_language_selector": true,
-        "payment_enable": true,
-        "show_policy": true,
-        "margin_top": 0,
-        "padding_top": 36,
-        "padding_bottom": 36
+        "footer_padding_top": 60,
+        "footer_padding_bottom": 40,
+        "footer_border_color": "#ffffff",
+        "footer_border_width": 0,
+        "footer_grid_margin": 24,
+        "footer_grid_gap": 40,
+        "footer_cols_gap": 50,
+        "footer_logo": "shopify://shop_images/The_Bare_Minimum_Club_mascot.png",
+        "logo_width": 400,
+        "logo_max_height": 400,
+        "mobile_breakpoint": 750,
+        "mobile_logo_width": 96,
+        "mobile_logo_max_height": 200,
+        "mobile_footer_grid_gap": 20,
+        "mobile_footer_cols_gap": 30,
+        "quick_links_heading": "Quick Links",
+        "follow_us_heading": "Follow Us",
+        "quick_menu": "footer",
+        "follow_menu": "",
+        "footer_heading_size": 18,
+        "footer_heading_color": "#000000",
+        "footer_heading_margin": 24,
+        "footer_link_size": 20,
+        "footer_link_color": "#000000",
+        "footer_link_spacing": 16,
+        "copyright_text": "Copyright 2025 The Bare Minimum Club.",
+        "show_powered_by": true,
+        "copyright_bold": true,
+        "copyright_size": 16,
+        "copyright_color": "#000000",
+        "copyright_padding_top": 18,
+        "copyright_margin_top": 0
       }
     }
   },
   "order": [
-    "footer"
+    "footer_QAE7jb"
   ]
 }

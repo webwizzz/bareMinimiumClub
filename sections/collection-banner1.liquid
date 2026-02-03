@@ -1,0 +1,99 @@
+{% schema %}
+{
+  "name": "Collection banner (Auto)",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "fallback_image",
+      "label": "Fallback image (used when collection metafield not present)"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Text alignment",
+      "options": [
+        {"value":"left","label":"Left"},
+        {"value":"center","label":"Center"},
+        {"value":"right","label":"Right"}
+      ],
+      "default": "left"
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    { "name": "Collection banner", "category": "Collection" }
+  ]
+}
+{% endschema %}
+
+<style>
+.collection-banner { padding: 28px 0; }
+.collection-banner__inner { max-width: 1440px; margin: 0 auto;}
+.collection-banner__title {
+  font-weight: 900;
+  text-transform: uppercase;
+  margin: 0 0 18px;
+  font-size: clamp(40px, 6.5vw, 110px);
+  line-height: 0.95;
+}
+.collection-banner--align-left .collection-banner__title { text-align: left; }
+.collection-banner--align-center .collection-banner__title { text-align: center; }
+.collection-banner--align-right .collection-banner__title { text-align: right; }
+.collection-banner__image { border-radius: 10px; overflow: hidden; }
+.collection-banner__image img { display:block; width:100%; height:auto; object-fit:cover; }
+
+@media (max-width: 1024px) {
+  .collection-banner__title { font-size: clamp(32px, 8vw, 80px); }
+}
+@media (max-width: 749px) {
+  .collection-banner { padding: 18px 0; }
+  .collection-banner__title { font-size: clamp(20px, 8vw, 36px); }
+  .collection-banner__image { border-radius: 8px; }
+}
+
+</style>
+
+{%- comment -%}
+  Collection banner
+  - Title: use `collection.title` when available, otherwise fallback to a section setting
+  - Image: prefer collection metafield `collection_banner` (common namespaces tried), otherwise use fallback image
+{%- endcomment -%}
+
+<section id="collection-banner-{{ section.id }}" class="collection-banner collection-banner--align-{{ section.settings.alignment }}">
+  <div class="collection-banner__inner">
+    {%- assign title_text = section.settings.fallback_title | default: '' -%}
+    {%- if collection and collection.title != blank -%}
+      {%- assign title_text = collection.title -%}
+    {%- endif -%}
+
+    <h2 class="collection-banner__title">{{ title_text }}</h2>
+
+    {%- comment -%} Resolve image: try common metafield namespaces then fallback to uploaded image {%- endcomment -%}
+    {%- assign banner_image = '' -%}
+    {%- if collection -%}
+      {%- if collection.metafields.custom and collection.metafields.custom.collection_banner != blank -%}
+        {%- assign banner_image = collection.metafields.custom.collection_banner -%}
+      {%- elsif collection.metafields.global and collection.metafields.global.collection_banner != blank -%}
+        {%- assign banner_image = collection.metafields.global.collection_banner -%}
+      {%- elsif collection.metafields.banner and collection.metafields.banner.collection_banner != blank -%}
+        {%- assign banner_image = collection.metafields.banner.collection_banner -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if banner_image == blank and section.settings.fallback_image != blank -%}
+      {%- assign banner_image = section.settings.fallback_image -%}
+    {%- endif -%}
+
+    <div class="collection-banner__image">
+      {%- if banner_image != blank -%}
+        {%- comment -%} Use picture tag to allow responsive sizes if needed {%- endcomment -%}
+        <picture>
+          <source media="(max-width:749px)" srcset="{{ banner_image | img_url: '800x' }}">
+          <img src="{{ banner_image | img_url: '2048x' }}" alt="{{ title_text }}">
+        </picture>
+      {%- else -%}
+        <div style="background:#f3f3f3; height:220px; border-radius:10px;"></div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>

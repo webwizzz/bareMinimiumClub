@@ -1,0 +1,84 @@
+{% schema %}
+{
+  "name": "About Us Banner",
+  "settings": [
+    { "type": "image_picker", "id": "logo_image", "label": "Logo image" },
+    { "type": "text", "id": "heading_line1", "label": "Heading (line 1 - script)", "default": "its not so" },
+    { "type": "text", "id": "heading_line2", "label": "Heading (line 2 - bold)", "default": "SERIOUS" },
+    { "type": "select", "id": "alignment", "label": "Text alignment", "options": [ {"value":"center","label":"Center"}, {"value":"left","label":"Left"}, {"value":"right","label":"Right"} ], "default": "center" }
+  ],
+  "blocks": [],
+  "presets": [ { "name": "About Us Banner", "category": "Image" } ]
+}
+{% endschema %}
+
+<style>
+.about-us-banner-section { padding: 48px 0; }
+.about-us-banner__wrap { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.about-us-banner__text { margin-top: 18px; }
+.about-us-banner--align-left .about-us-banner__text { text-align: left; }
+.about-us-banner--align-right .about-us-banner__text { text-align: right; }
+.about-us-banner--align-center .about-us-banner__text { text-align: center; }
+.about-us-banner__logo { display:block; margin: 0 auto 12px; max-width: 240px; }
+.about-us-banner__logo img { width:100%; height:auto; display:block; }
+.about-us-banner__heading-line1 {
+  font-family: 'snellBT' !important;
+  /* apply white highlight beneath the script word: bottom-offset multi-shadow */
+  text-shadow:
+    0 2px 0 #ffffff;
+  color: #122443;
+  font-size: 90px;
+  /* overlap the bold line below by pulling this element down with a negative margin
+     and ensure it visually sits on top using positioning and z-index */
+  display: inline-block;
+  position: relative;
+  z-index: 2;
+  line-height: 0.9;
+  padding-left: 20px;
+}
+.about-us-banner__heading-line2 {
+  font-weight: 900;
+  color: #122443;
+  font-size: 108px;
+  margin: 0;
+  line-height: 0.9;
+  position: relative;
+  z-index: 1;
+  top: -25px;
+}
+.about-us-banner__bg { width:100%; overflow:hidden; }
+.about-us-banner__bg img { width:100%; height:auto; display:block; object-fit:cover; }
+
+@media (min-width: 750px) {
+  .about-us-banner__bg { aspect-ratio: 1200 / 420; padding-inline: 32px; box-sizing: border-box; }
+  .about-us-banner__bg img { width:100%; height:100%; object-fit:cover; display:block; }
+}
+
+/* Mobile: keep alignment the same, only reduce sizes */
+@media (max-width: 1024px) {
+  .about-us-banner-section { padding: 28px 0; }
+  .about-us-banner__logo { max-width: 160px; }
+  .about-us-banner__heading-line2 { font-size: 70px; top: -14px;}
+  .about-us-banner__heading-line1 { font-size: 50px; }
+}
+
+</style>
+
+<section id="about-us-banner-{{ section.id }}" class="about-us-banner-section about-us-banner--align-{{ section.settings.alignment }}">
+  <div class="about-us-banner__wrap">
+    {% if section.settings.logo_image != blank %}
+      <div class="about-us-banner__logo" role="img" aria-label="Logo">
+        <img src="{{ section.settings.logo_image | img_url: '800x' }}" alt="Logo">
+      </div>
+    {% endif %}
+
+    <div class="about-us-banner__text">
+      {% if section.settings.heading_line1 != blank %}
+        <div class="about-us-banner__heading-line1">{{ section.settings.heading_line1 }}</div>
+      {% endif %}
+      {% if section.settings.heading_line2 != blank %}
+        <div class="about-us-banner__heading-line2">{{ section.settings.heading_line2 }}</div>
+      {% endif %}
+    </div>
+  </div>
+</section>

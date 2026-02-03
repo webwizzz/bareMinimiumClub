@@ -1,0 +1,26 @@
+
+
+<div class="blog-post-content rte">
+  <rte-formatter>
+    {{ article.content }}
+  </rte-formatter>
+</div>
+
+<style>
+  .blog-post-content {
+    max-width: var(--normal-content-width);
+    margin: 0 auto;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "t:names.content",
+  "settings": [],
+  "presets": [
+    {
+      "name": "t:names.content"
+    }
+  ]
+}
+{% endschema %}

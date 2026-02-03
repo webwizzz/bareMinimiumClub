@@ -1,0 +1,309 @@
+
+
+{% liquid
+  # Use selected product from block settings, fallback to closest.product
+  if block.settings.featured_product != blank
+    assign product = block.settings.featured_product
+  else
+    assign product = closest.product
+  endif
+-%}
+
+<div class="product-card-wrapper">
+  {% if product != blank %}
+    <a href="{{ product.url }}" class="product-card-link">
+      <div class="product-card-image">
+        {% if product.featured_media %}
+          {{ product.featured_media | image_url: width: 350, height: 450 | image_tag: alt: product.title, loading: 'lazy' }}
+        {% else %}
+          <div class="product-card-placeholder">
+            {% render 'icon-product' %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="product-card-details">
+        <h3 class="product-card-title">{{ product.title }}</h3>
+        <p class="product-card-price">
+          {% if product.price_varies %}
+            {{ product.price_min | money }}+
+          {% else %}
+            {{ product.price | money }}
+          {% endif %}
+        </p>
+      </div>
+    </a>
+  {% else %}
+    <div class="product-card-placeholder-full">
+      <div class="product-card-image">
+        <div class="product-card-placeholder">
+          {% render 'icon-product' %}
+        </div>
+      </div>
+      <div class="product-card-details">
+        <h3 class="product-card-title">Product Title</h3>
+        <p class="product-card-price">4999/-</p>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+.product-card-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.product-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  height: 100%;
+}
+
+.product-card-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 175/223;
+  overflow: hidden;
+  background-color: #f5f5f5;
+}
+
+.product-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-card-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: #f5f5f5;
+}
+
+.product-card-placeholder svg {
+  width: 50px;
+  height: 50px;
+  opacity: 0.5;
+}
+
+.product-card-details {
+  padding: 8px 0;
+}
+
+.product-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+}
+
+.product-card-price {
+  font-size: 14px;
+  margin: 0;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .product-card-title {
+    font-size: 12px;
+  }
+  
+  .product-card-price {
+    font-size: 12px;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "t:names.product_card",
+  "blocks": [
+    {
+      "type": "_product-card-group"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "image"
+    },
+    {
+      "type": "buy-buttons"
+    },
+    {
+      "type": "price"
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "sku"
+    },
+    {
+      "type": "swatches"
+    },
+    {
+      "type": "_product-card-gallery"
+    },
+    {
+      "type": "product-title"
+    },
+    {
+      "type": "custom-liquid"
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "tag": null,
+  "settings": [
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "Select Product",
+      "info": "Choose a product to display in this card"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_title",
+      "label": "Placeholder Title",
+      "default": "Product Title",
+      "info": "Title to show when no product is selected"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_price",
+      "label": "Placeholder Price", 
+      "default": "4999/-",
+      "info": "Price to show when no product is selected"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:content.resource_reference_product_card"
+    },
+    {
+      "type": "range",
+      "id": "product_card_gap",
+      "label": "t:settings.vertical_gap",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "checkbox",
+      "id": "inherit_color_scheme",
+      "label": "t:settings.inherit_color_scheme",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1",
+      "visible_if": "{{ block.settings.inherit_color_scheme == false }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.borders"
+    },
+    {
+      "type": "select",
+      "id": "border",
+      "label": "t:settings.style",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.none"
+        },
+        {
+          "value": "solid",
+          "label": "t:options.solid"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:settings.thickness",
+      "default": 1,
+      "visible_if": "{{ block.settings.border != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "border_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:settings.opacity",
+      "default": 100,
+      "visible_if": "{{ block.settings.border != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "t:settings.border_radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}
