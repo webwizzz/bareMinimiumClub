@@ -1,0 +1,665 @@
+{%- doc -%}
+  Renders a size guide button that opens a drawer with size chart information.
+  This block should be placed between the price and variant picker blocks.
+{%- enddoc -%}
+
+{% liquid
+  assign block_settings = block.settings
+  assign product_resource = closest.product
+%}
+
+<script
+  src="{{ 'size-guide-drawer.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+
+<size-guide-drawer
+  class="size-guide spacing-style"
+  style="{% render 'spacing-style', settings: block_settings %}"
+  {{ block.shopify_attributes }}
+>
+  <details
+    id="Details-size-guide-{{ section.id }}"
+    data-skip-node-update="true"
+    class="size-guide-container"
+    ref="details"
+    scroll-lock
+  >
+    <summary
+      class="size-guide__button"
+      aria-label="{{ 'Size chart' }}"
+      on:click="/toggle"
+    >
+      <span class="size-guide__button-text">{{ block_settings.button_text | default: 'Size chart' }}</span>
+    </summary>
+    
+    <div
+      data-size-guide-drawer
+      class="size-guide-drawer motion-reduce"
+    >
+      <div class="size-guide-drawer__header">
+        <h2 class="size-guide-drawer__title">SIZE CHART</h2>
+        <span class="size-guide-drawer__product-name">{{ product_resource.title | upcase }}</span>
+        <button
+          class="size-guide-drawer__close-button"
+          type="button"
+          aria-label="{{ 'actions.close' | t }}"
+          on:click="/close"
+        >
+          <span class="svg-wrapper size-guide-icon--close">
+            {{- 'icon-close.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      </div>
+      
+      <div class="size-guide-drawer__content">
+        {% if block_settings.size_chart_image != blank %}
+          <div class="size-guide-drawer__image">
+            {{ block_settings.size_chart_image | image_url: width: 600 | image_tag: class: 'size-guide-drawer__chart-image', loading: 'lazy' }}
+          </div>
+        {% endif %}
+
+        {% if block_settings.show_size_table %}
+          <div class="size-guide-drawer__table-wrapper">
+            <table class="size-guide-drawer__table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>XS</th>
+                  <th>S</th>
+                  <th>M</th>
+                  <th>L</th>
+                  <th>XL</th>
+                  <th>XXL</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="size-guide-row-label">TO FIT YOUR CHEST SIZE</td>
+                  <td>36</td>
+                  <td>38</td>
+                  <td>40</td>
+                  <td>42</td>
+                  <td>44</td>
+                  <td>46</td>
+                </tr>
+                <tr>
+                  <td class="size-guide-row-label">GARMENT CHEST</td>
+                  <td>42</td>
+                  <td>44</td>
+                  <td>46</td>
+                  <td>48</td>
+                  <td>50</td>
+                  <td>52</td>
+                </tr>
+                <tr>
+                  <td class="size-guide-row-label">SHOULDER</td>
+                  <td>20</td>
+                  <td>21</td>
+                  <td>22</td>
+                  <td>23</td>
+                  <td>24</td>
+                  <td>25</td>
+                </tr>
+                <tr>
+                  <td class="size-guide-row-label">LENGTH</td>
+                  <td>27</td>
+                  <td>27.5</td>
+                  <td>28</td>
+                  <td>28.5</td>
+                  <td>29</td>
+                  <td>29.5</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        {% endif %}
+
+        {% if block_settings.note_text != blank %}
+          <div class="size-guide-drawer__note">
+            <p class="size-guide-drawer__note-title">NOTE:</p>
+            <p class="size-guide-drawer__note-text">{{ block_settings.note_text }}</p>
+          </div>
+        {% endif %}
+
+        {% if block_settings.show_how_to_measure %}
+          <div class="size-guide-drawer__how-to-measure">
+            <h3 class="size-guide-drawer__section-title">HOW TO MEASURE?</h3>
+            
+
+            {% if block_settings.measure_to_fit_chest != blank %}
+              <div class="size-guide-drawer__measure-item">
+                <h4 class="size-guide-drawer__measure-label">TO FIT YOUR CHEST SIZE</h4>
+                <p class="size-guide-drawer__measure-desc">{{ block_settings.measure_to_fit_chest }}</p>
+              </div>
+            {% endif %}
+
+            {% if block_settings.measure_garment_chest != blank %}
+              <div class="size-guide-drawer__measure-item">
+                <h4 class="size-guide-drawer__measure-label">GARMENT CHEST</h4>
+                <p class="size-guide-drawer__measure-desc">{{ block_settings.measure_garment_chest }}</p>
+              </div>
+            {% endif %}
+
+            {% if block_settings.measure_shoulder != blank %}
+              <div class="size-guide-drawer__measure-item">
+                <h4 class="size-guide-drawer__measure-label">SHOULDER</h4>
+                <p class="size-guide-drawer__measure-desc">{{ block_settings.measure_shoulder }}</p>
+              </div>
+            {% endif %}
+
+            {% if block_settings.measure_length != blank %}
+              <div class="size-guide-drawer__measure-item">
+                <h4 class="size-guide-drawer__measure-label">LENGTH</h4>
+                <p class="size-guide-drawer__measure-desc">{{ block_settings.measure_length }}</p>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    
+    <div class="size-guide-drawer__backdrop" on:click="size-guide-drawer/close"></div>
+  </details>
+</size-guide-drawer>
+
+<style>
+  /* Size guide button styling */
+  .size-guide {
+    display: block;
+    text-align: right;
+  }
+
+  /* When open, the size-guide element needs to establish proper stacking */
+  .size-guide:has(.size-guide-container.menu-open) {
+    position: static;
+  }
+
+  .size-guide-container {
+    position: static;
+  }
+
+  /* When menu is open, ensure it breaks out of stacking context */
+  .size-guide-container.menu-open {
+    position: static;
+  }
+
+  .size-guide__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #000;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    list-style: none;
+  }
+
+  .size-guide__button::-webkit-details-marker {
+    display: none;
+  }
+
+  .size-guide__button:hover {
+    opacity: 0.7;
+  }
+
+  .size-guide__button-text {
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* Drawer styling - slide from RIGHT like menu drawer */
+  .size-guide-drawer {
+    position: fixed;
+    transform: translateX(100%);
+    visibility: hidden;
+    height: 100vh;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    z-index: 9999;
+    right: 0;
+    top: 0;
+    padding: 0;
+    background-color: #ffffff;
+    overflow: auto;
+    display: flex;
+    border-left: 1px solid #e5e5e5;
+    box-shadow: -2px 0 18px rgba(0, 0, 0, 0.12);
+    flex-direction: column;
+    transition: transform 0.3s ease, visibility 0.3s ease, opacity 0.3s ease;
+  }
+
+  /* Desktop width - match menu drawer */
+  @media screen and (min-width: 750px) {
+    .size-guide-drawer {
+      width: 40vw !important;
+      max-width: 500px !important;
+    }
+  }
+
+  /* Backdrop */
+  .size-guide-drawer__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+    backdrop-filter: brightness(0.75);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  /* Open state */
+  .size-guide-container.menu-open > .size-guide-drawer,
+  .size-guide-drawer-wrapper.menu-open > .size-guide-drawer {
+    transform: translateX(0);
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .size-guide-container.menu-open > .size-guide-drawer__backdrop,
+  .size-guide-drawer-wrapper.menu-open > .size-guide-drawer__backdrop {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Header section */
+  .size-guide-drawer__header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 24px 30px;
+    border-bottom: 1px solid #f0f0f0;
+    background-color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    gap: 8px;
+  }
+
+  .size-guide-drawer__title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #000;
+    margin: 0;
+    flex-basis: 100%;
+  }
+
+  .size-guide-drawer__product-name {
+    font-size: 12px;
+    font-weight: 400;
+    color: #666;
+    letter-spacing: 0.5px;
+    flex: 1;
+  }
+
+  .size-guide-drawer__close-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    color: #000;
+    position: absolute;
+    right: 24px;
+    top: 24px;
+  }
+
+  .size-guide-drawer__close-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .size-guide-icon--close {
+    display: flex;
+  }
+
+  /* Content section */
+  .size-guide-drawer__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 30px;
+  }
+
+  /* Image */
+  .size-guide-drawer__image {
+    margin-bottom: 24px;
+  }
+
+  .size-guide-drawer__chart-image {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+
+  /* Table styling */
+  .size-guide-drawer__table-wrapper {
+    margin-bottom: 24px;
+    overflow-x: auto;
+  }
+
+  .size-guide-drawer__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .size-guide-drawer__table th,
+  .size-guide-drawer__table td {
+    padding: 12px 16px;
+    text-align: center;
+    border: 1px solid #e5e5e5;
+  }
+
+  .size-guide-drawer__table th {
+    background-color: #f8f8f8;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: #000;
+  }
+
+  .size-guide-drawer__table td {
+    font-weight: 400;
+    color: #333;
+  }
+
+  .size-guide-drawer__table tbody tr:hover {
+    background-color: #fafafa;
+  }
+
+  /* Note section */
+  .size-guide-drawer__note {
+    margin-bottom: 24px;
+    padding: 16px;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+  }
+
+  .size-guide-drawer__note-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #000;
+    margin: 0 0 8px 0;
+    letter-spacing: 0.5px;
+  }
+
+  .size-guide-drawer__note-text {
+    font-size: 12px;
+    font-weight: 400;
+    color: #666;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* How to measure section */
+  .size-guide-drawer__how-to-measure {
+    margin-top: 24px;
+  }
+
+  .size-guide-drawer__section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+    margin: 0 0 20px 0;
+    letter-spacing: 0.5px;
+  }
+
+  .size-guide-drawer__measure-item {
+    margin-bottom: 16px;
+  }
+
+  .size-guide-drawer__measure-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #000;
+    margin: 0 0 4px 0;
+  }
+
+  .size-guide-drawer__measure-desc {
+    font-size: 12px;
+    font-weight: 400;
+    color: #666;
+    margin: 0;
+    line-height: 1.5;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Size Guide",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Size chart"
+    },
+    {
+      "type": "image_picker",
+      "id": "size_chart_image",
+      "label": "Size chart image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_size_table",
+      "label": "Show size table",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "XS Size"
+    },
+    {
+      "type": "text",
+      "id": "size_xs_waist",
+      "label": "Waist",
+      "default": "25"
+    },
+    {
+      "type": "text",
+      "id": "size_xs_hip",
+      "label": "Hip",
+      "default": "32"
+    },
+    {
+      "type": "text",
+      "id": "size_xs_length",
+      "label": "Length",
+      "default": "14"
+    },
+    {
+      "type": "header",
+      "content": "S Size"
+    },
+    {
+      "type": "text",
+      "id": "size_s_waist",
+      "label": "Waist",
+      "default": "27"
+    },
+    {
+      "type": "text",
+      "id": "size_s_hip",
+      "label": "Hip",
+      "default": "34"
+    },
+    {
+      "type": "text",
+      "id": "size_s_length",
+      "label": "Length",
+      "default": "14"
+    },
+    {
+      "type": "header",
+      "content": "M Size"
+    },
+    {
+      "type": "text",
+      "id": "size_m_waist",
+      "label": "Waist",
+      "default": "29"
+    },
+    {
+      "type": "text",
+      "id": "size_m_hip",
+      "label": "Hip",
+      "default": "36"
+    },
+    {
+      "type": "text",
+      "id": "size_m_length",
+      "label": "Length",
+      "default": "14.5"
+    },
+    {
+      "type": "header",
+      "content": "L Size"
+    },
+    {
+      "type": "text",
+      "id": "size_l_waist",
+      "label": "Waist",
+      "default": "31"
+    },
+    {
+      "type": "text",
+      "id": "size_l_hip",
+      "label": "Hip",
+      "default": "38"
+    },
+    {
+      "type": "text",
+      "id": "size_l_length",
+      "label": "Length",
+      "default": "15"
+    },
+    {
+      "type": "header",
+      "content": "XL Size"
+    },
+    {
+      "type": "text",
+      "id": "size_xl_waist",
+      "label": "Waist",
+      "default": "33"
+    },
+    {
+      "type": "text",
+      "id": "size_xl_hip",
+      "label": "Hip",
+      "default": "40"
+    },
+    {
+      "type": "text",
+      "id": "size_xl_length",
+      "label": "Length",
+      "default": "15.5"
+    },
+    {
+      "type": "header",
+      "content": "Note"
+    },
+    {
+      "type": "textarea",
+      "id": "note_text",
+      "label": "Note text",
+      "default": "All sizes are in inches. All the measurements are taken by hand, please consider a tolerance of 0.5 inches. The sizes mentioned above are of the garment."
+    },
+    {
+      "type": "header",
+      "content": "How to Measure"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_how_to_measure",
+      "label": "Show how to measure section",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "measure_length",
+      "label": "Length instructions",
+      "default": "For length measurements, stand straight against a wall with your heels together. Place the measuring tape from your waist down to the floor."
+    },
+    {
+      "type": "textarea",
+      "id": "measure_to_fit_chest",
+      "label": "To fit chest instructions",
+      "default": "Measure around the fullest part of your chest while keeping the tape parallel to the floor. This helps select the appropriate size to fit your chest."
+    },
+    {
+      "type": "textarea",
+      "id": "measure_garment_chest",
+      "label": "Garment chest instructions",
+      "default": "Measure the chest of a garment that fits you well from one armpit to the other and double it. Compare this to the garment chest measurements in the table."
+    },
+    {
+      "type": "textarea",
+      "id": "measure_shoulder",
+      "label": "Shoulder instructions",
+      "default": "Measure across the back from one shoulder seam to the other at the widest point. This gives the shoulder width of the garment."
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Size Guide",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

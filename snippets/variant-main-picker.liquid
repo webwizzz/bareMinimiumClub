@@ -63,9 +63,6 @@
           >
             <legend class="variant-option__legend">
               <span class="variant-option__name">{{ product_option.name | escape }}</span>
-              {%- if product_option.name | downcase contains 'size' -%}
-                <button type="button" class="size-chart-trigger" aria-expanded="false" data-target="size-chart-{{ section.id }}">Size chart</button>
-              {%- endif %}
               {%- if variant_style == 'swatch' -%}
                 <span class="variant-option__swatch-value">{{ product_option.selected_value }}</span>
               {%- endif %}
