@@ -44,7 +44,7 @@ links to the product page (PDP).
     {% if product_obj %}
       <div class="product-banners__meta-left">
         <h3 class="product-banners__title">{{ product_obj.title }}</h3>
-        <p class="product-banners__description">{{ product_obj.description | strip_html  }}</p>
+        <p class="product-banners__description">{{ product_obj.description | strip_html | truncate: 220 }}</p>
       </div>
       <div class="product-banners__meta-right">
         <a class="product-banners__see-more" href="{{ product_obj.url }}">See More &gt;</a>
@@ -87,7 +87,7 @@ links to the product page (PDP).
   .product-banners__meta{ max-width: var(--content-width, 1200px); margin: 12px auto 40px; display:flex; justify-content:space-between; gap:20px; padding: 0 30px !important; align-items:flex-start }
   .product-banners__meta-left{ flex: 1 1 70%; }
   .product-banners__meta-right{ flex: 0 0 140px; text-align:right }
-  .product-banners__title{ margin:8px 0 12px; font-size:24px; letter-spacing:0.4px; font-weight:600; text-transform:uppercase }
+  .product-banners__title{ margin:8px 0 12px; font-size:24px; letter-spacing:0.4px; font-family: 'satoshi-bold' !important; text-transform:uppercase }
   .product-banners__description{ margin:0; color:#000; font-size:16px; line-height:1.5 }
   .product-banners__see-more{ color: #00000050;; text-decoration:none; font-weight:400; font-size:12px }
     .product-banners__see-more:hover{ text-decoration:underline; underline-offset:2px }
@@ -107,7 +107,7 @@ links to the product page (PDP).
 
   @media (max-width: 520px){
     .product-banners__col{ flex-basis:auto }
-    .product-banners__meta{ padding: 0 12px }
+    .product-banners__meta{ padding: 0px !important; max-width: none; text-align: left; }
     .product-banners__img,
     .product-banners__placeholder { height: 220px; width: 200px}
     .product-banners__see-more{ font-size:14px }

@@ -151,10 +151,51 @@
     padding: 0;
     border: var(--style-border-popover);
 
+    /* Mobile: full screen modal */
+    width: 100vw;
+    height: 100dvh;
+    margin: 0;
+    /* keep hidden by default; only show when dialog has [open] */
+    display: none;
+    overflow: hidden;
+
     @media screen and (min-width: 750px) {
-      width: var(--modal-width);
+      /* Desktop: default centered modal sizing (will be overridden to drawer below) */
+      width: min(920px, var(--modal-width));
+      max-width: 92vw;
+      height: auto;
       margin-block-start: var(--modal-top-margin);
       overflow: hidden;
+    }
+  }
+
+  /* Show dialog when open */
+  .search-modal__content[open] {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  /* Right-slide animations for desktop drawer */
+  @keyframes search-element-slide-in-right {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0%);
+      opacity: 1;
+    }
+  }
+
+  @keyframes search-element-slide-out-right {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(-100%);
+      opacity: 0;
     }
   }
 
@@ -174,10 +215,32 @@
     @media screen and (max-width: 749px) {
       border-radius: 0;
     }
+
+    /* Desktop: make it behave like a right-side drawer (keep mobile styling internally) */
+    @media screen and (min-width: 750px) {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      margin: 0;
+      height: 100dvh;
+      width: min(480px, var(--modal-width));
+      max-width: 92vw;
+      transform-origin: right center;
+      animation: search-element-slide-in-right 300ms var(--ease-out-quad) forwards;
+      border-radius: var(--search-border-radius) 0 0 var(--search-border-radius);
+      box-shadow: var(--shadow-popover);
+      overflow: hidden;
+      z-index: var(--layer-heightened);
+    }
   }
 
   .dialog-modal.search-modal__content.dialog-closing {
     animation: search-element-slide-out-bottom 200ms var(--ease-out-quad) forwards;
+
+    @media screen and (min-width: 750px) {
+      animation: search-element-slide-out-right 200ms var(--ease-out-quad) forwards;
+    }
   }
 
   .search-modal__content[open] {
@@ -231,16 +294,18 @@
   }
 
   .predictive-search-form__footer {
-    display: none;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    @media screen and (min-width: 750px) {
-      --to-top-gradient-background: linear-gradient(
-        to top,
-        rgb(var(--color-background-rgb) / var(--opacity-90)),
+    display: flex;
+    /* expose header height to compute content area */
+    --search-header-height: 72px;
+    position: sticky;
+    top: 0;
+    z-index: var(--layer-heightened);
+    width: 100%;
+    align-items: center;
+    background-color: var(--color-input-background);
+    padding: 12px;
+    border: none;
+    border-radius: var(--style-border-radius-inputs);
         rgb(var(--color-background-rgb) / var(--opacity-80)),
         rgb(var(--color-background-rgb) / var(--opacity-40)),
         transparent
@@ -292,10 +357,42 @@
 
     @media screen and (max-width: 749px) {
       border-radius: 0;
+      /* On small screens the wrapper should be part of document flow so header + content fit inside the full-screen dialog */
+      position: relative;
+      top: 0;
+      max-height: calc(100dvh - 72px);
     }
 
+    /* Desktop: make wrapper behave as the drawer's internal flow so header + content stack and the content can fill remaining height */
     @media screen and (min-width: 750px) {
-      max-height: var(--modal-max-height);
+      position: relative;
+      top: 0;
+      height: 100vh;
+      max-height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+
+  /* Desktop: let the inner content fill remaining drawer height (header + results) */
+  @media screen and (min-width: 750px) {
+    .predictive-search-form__content {
+      max-height: 100vh;
+    }
+    .predictive-search-form__content-wrapper > .predictive-search-form__content {
+      flex: 1 1 auto;
+    }
+  }
+    @media screen and (min-width: 750px) {
+      max-height: 100vh;
+    }
+  }
+
+  /* Mobile: ensure content sits below header and can scroll within viewport height */
+  @media screen and (max-width: 749px) {
+    .predictive-search-form__content {
+      max-height: calc(100dvh - 72px);
     }
   }
 
@@ -337,7 +434,8 @@
     width: 100%;
     align-items: center;
     background-color: var(--color-input-background);
-    border: var(--search-border-width) solid var(--color-border);
+    padding: 12px;
+    border: none;
     border-radius: var(--style-border-radius-inputs);
 
     @media screen and (max-width: 749px) {
@@ -499,7 +597,7 @@
 
   .predictive-search__close-modal-button {
     --button-color: var(--color-foreground);
-    --button-background-color: transparent;
+    background-color: transparent;
 
     display: flex;
     justify-content: center;
