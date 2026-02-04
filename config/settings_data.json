@@ -52,6 +52,31 @@
       "change_font": {
         "type": "change_font",
         "blocks": {
+          "font_UqFJT9": {
+            "type": "font",
+            "settings": {
+              "name": "satoshi-bold",
+              "custom_font_url": "https://cdn.shopify.com/s/files/1/0803/8514/7100/files/Satoshi-Bold.otf?v=1770196251",
+              "custom_font_weight": "400",
+              "custom_font_style": "normal",
+              "apply_h1": false,
+              "apply_h2": false,
+              "apply_h3": false,
+              "apply_h4": false,
+              "apply_h5": false,
+              "apply_h6": false,
+              "apply_p": false,
+              "apply_a": false,
+              "apply_li": false,
+              "apply_ul": false,
+              "apply_ol": false,
+              "apply_span": false,
+              "apply_div": false,
+              "apply_button": false,
+              "apply_input": false,
+              "custom_selector": ""
+            }
+          },
           "font_cMf9jT": {
             "type": "font",
             "settings": {
@@ -104,6 +129,7 @@
           }
         },
         "block_order": [
+          "font_UqFJT9",
           "font_cMf9jT",
           "font_kUgTRT"
         ],

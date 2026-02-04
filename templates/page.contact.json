@@ -47,7 +47,7 @@
       },
       "name": "Contact Us",
       "settings": {
-        "left_content": "<h1>CONTACT US</h1><p>To contact customer support for any product information or queries regarding an order, please write to us in the message box below or reach out to us with the respective email address <a href=\"mailto:support@thebareminimumclub.in\" title=\"mailto:support@thebareminimumclub.in\"><strong>support@thebareminimumclub.in</strong></a> or send us a message on respective number <a href=\"tel:+91 828 828 8282\" title=\"tel:+91 828 828 8282\"><strong>+91 828 828 8282</strong></a></p><p><strong>For all business queries, email us at </strong><a href=\"mailto:team@thebareminimumclub.in\" title=\"mailto:team@thebareminimumclub.in\"><strong>team@thebareminimumclub.in</strong></a></p>",
+        "left_content": "<h1><strong>CONTACT US</strong></h1><p>To contact customer support for any product information or queries regarding an order, please write to us in the message box below or reach out to us with the respective email address <a href=\"mailto:support@thebareminimumclub.in\" title=\"mailto:support@thebareminimumclub.in\"><strong>support@thebareminimumclub.in</strong></a> or send us a message on respective number <a href=\"tel:+91 828 828 8282\" title=\"tel:+91 828 828 8282\"><strong>+91 828 828 8282</strong></a></p><p><strong>For all business queries, email us at </strong><a href=\"mailto:team@thebareminimumclub.in\" title=\"mailto:team@thebareminimumclub.in\"><strong>team@thebareminimumclub.in</strong></a></p>",
         "right_heading": ""
       }
     }

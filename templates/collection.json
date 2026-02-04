@@ -47,6 +47,9 @@
           "type": "_product-card",
           "static": true,
           "settings": {
+            "featured_product": "{{ closest.product }}",
+            "placeholder_title": "Product Title",
+            "placeholder_price": "4999/-",
             "product_card_gap": 0,
             "inherit_color_scheme": false,
             "color_scheme": "scheme-e1e09ff5-6396-47cd-ad7a-c05470cf2a2e",
