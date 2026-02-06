@@ -4,6 +4,15 @@
   {{ closest.product | structured_data }}
 </script>
 
+<!-- Mobile-only product title + price shown at top on small screens -->
+<div class="mobile-product-top" aria-hidden="false">
+  <h1 class="view-product-title">
+    <a class="link" href="{{ product.url }}">{{ product.title | escape }}</a>
+  </h1>
+  <div class="product-price">
+    {% render 'price', product_resource: product, show_sale_price_first: true %}
+  </div>
+</div>
 {% capture media_gallery %}
   {%- content_for 'block',
     type: '_product-media-gallery',
@@ -357,6 +366,19 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+  }
+
+  /* Mobile-only: show duplicated title+price at top and hide originals on small screens */
+  .mobile-product-top { display: none; }
+
+  @media screen and (max-width: 749px) {
+    .mobile-product-top { 
+      display: block;         
+      padding: 0 16px;
+      padding-top: 20px;
+    }
+    .product-details .view-product-title a.link { display: none !important; }
+    .product-details .price { display: none !important; }
   }
 </style>
 

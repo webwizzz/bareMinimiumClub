@@ -25,33 +25,55 @@
 
 <header-actions
   {{- block.shopify_attributes -}}
+  class="header-actions-unified"
 >
-  {%- comment -%} Account icon removed from header — account actions moved into menu drawer {%- endcomment -%}
+  <div class="header-actions__container">
+    {%- comment -%} Search Icon {%- endcomment -%}
+    {% if section.settings.show_search %}
+      <search-button class="header-actions__search">
+        <button
+          on:click="#search-modal/showDialog"
+          class="button button-unstyled header-actions__action"
+          aria-label="{{ 'content.search_input_label' | t }}"
+          aria-haspopup="dialog"
+        >
+          <span
+            aria-hidden="true"
+            class="svg-wrapper"
+          >
+            {{ 'search.svg' | inline_asset_content }}
+          </span>
+        </button>
+      </search-button>
+    {% endif %}
 
-  {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
-    <script
-      src="{{ 'cart-drawer.js' | asset_url }}"
-      type="module"
-      fetchpriority="low"
-    ></script>
+    {%- comment -%} Cart Icon {%- endcomment -%}
 
-    <cart-drawer-component
-      class="cart-drawer"
-      {{ block.shopify_attributes }}
-      {% if settings.auto_open_cart_drawer %}
-        auto-open
-      {% endif %}
-    >
-      <button
-        class="button header-actions__action button-unstyled"
-        on:click="/open"
-        aria-haspopup="dialog"
-        aria-label="{{ 'accessibility.cart' | t }}"
-        aria-describedby="cart-bubble-text"
-        data-testid="cart-drawer-trigger"
+    {%- comment -%} Cart Icon {%- endcomment -%}
+    {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
+      <script
+        src="{{ 'cart-drawer.js' | asset_url }}"
+        type="module"
+        fetchpriority="low"
+      ></script>
+
+      <cart-drawer-component
+        class="cart-drawer header-actions__cart"
+        {{ block.shopify_attributes }}
+        {% if settings.auto_open_cart_drawer %}
+          auto-open
+        {% endif %}
       >
-        {{ cart_icon }}
-      </button>
+        <button
+          class="button header-actions__action button-unstyled"
+          on:click="/open"
+          aria-haspopup="dialog"
+          aria-label="{{ 'accessibility.cart' | t }}"
+          aria-describedby="cart-bubble-text"
+          data-testid="cart-drawer-trigger"
+        >
+          {{ cart_icon }}
+        </button>
 
       <dialog
         ref="dialog"
@@ -142,18 +164,130 @@
       </dialog>
     </cart-drawer-component>
   {% else %}
-    <a
-      href="{{ routes.cart_url }}"
-      class="header-actions__action action__cart"
-      aria-label="{{ 'accessibility.cart' | t }}"
-      aria-describedby="cart-bubble-text"
-    >
-      {{ cart_icon }}
-    </a>
+    <div class="header-actions__cart">
+      <a
+        href="{{ routes.cart_url }}"
+        class="header-actions__action action__cart"
+        aria-label="{{ 'accessibility.cart' | t }}"
+        aria-describedby="cart-bubble-text"
+      >
+        {{ cart_icon }}
+      </a>
+    </div>
   {% endif %}
+
+    {%- comment -%} Mobile Menu Icon - Now shows on all devices {%- endcomment -%}
+    <div class="header-actions__menu">
+      {% render 'header-drawer',
+        class: 'header-actions__drawer',
+        linklist: menu_linklist,
+        data_header_drawer_type: 'mobile-drawer'
+      %}
+    </div>
+  </div>
 </header-actions>
 
 <style>
+  /* Unified Header Actions Container */
+  .header-actions-unified {
+    display: flex;
+    align-items: center;
+  }
+
+  .header-actions__container {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm, 12px);
+    height: var(--minimum-touch-target, 44px);
+  }
+
+  .header-actions__search,
+  .header-actions__cart,
+  .header-actions__menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--minimum-touch-target, 44px);
+    min-height: var(--minimum-touch-target, 44px);
+  }
+
+  .header-actions__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--minimum-touch-target, 44px);
+    height: var(--minimum-touch-target, 44px);
+    padding: 0;
+    color: var(--color-foreground);
+    border: none;
+    background: transparent;
+    border-radius: var(--style-border-radius-buttons, 4px);
+    transition: all var(--animation-speed, 300ms) var(--animation-easing, ease);
+    cursor: pointer;
+  }
+
+  .header-actions__action:hover,
+  .header-actions__action:focus-visible {
+    background-color: var(--color-background-accent, rgba(0, 0, 0, 0.1));
+    color: var(--color-foreground-accent, var(--color-foreground));
+    transform: scale(1.05);
+  }
+
+  .header-actions__action .svg-wrapper {
+    width: var(--icon-size-xs, 20px);
+    height: var(--icon-size-xs, 20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header-actions__action svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+  }
+
+  /* Mobile menu specific styling */
+  {% comment %} .header-actions__menu {
+    margin-left: var(--gap-xs, 8px);
+  } {% endcomment %}
+
+  .header-actions__drawer {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Consistent spacing across all devices */
+  .header-actions__container {
+    gap: var(--gap-sm, 12px);
+  }
+
+  @media screen and (max-width: 749px) {
+    .header-actions__container {
+      gap: 0px;
+    }
+    
+    .header-actions__menu {
+      margin-left: -2px;
+    }
+    
+    .header-actions__cart {
+      margin-left: -2px;
+    }
+  }
+
+  /* Cart icon specific styling */
+  .header-actions__cart-icon {
+    position: relative;
+  }
+
+  .header-actions__cart-icon .cart-bubble {
+    position: absolute;
+    width: 10px;
+    top: var(--cart-bubble-top, 8px);
+    right: var(--cart-bubble-right, 8px);
+  }
+
   .account-popover {
     --account-popover-min-width: 22rem;
     --account-actions-max-width: 22rem;

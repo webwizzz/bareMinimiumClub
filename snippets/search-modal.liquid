@@ -130,7 +130,7 @@
   </dialog>
 </dialog-component>
 
-<style>
+{% stylesheet %}
   /* Search modal style */
   .search-modal {
     --search-border-radius: var(--style-border-radius-popover);
@@ -404,13 +404,14 @@
 
   .predictive-search-form__header-inner {
     background: var(--color-background);
-    border: var(--search-border-width) solid var(--color-border);
+    border: none;
     color: var(--color-foreground);
     border-radius: var(--style-border-radius-popover);
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    margin: 10px;
 
     @media screen and (max-width: 749px) {
       border-radius: var(--style-border-radius-inputs);
@@ -624,4 +625,4 @@
     --button-color: var(--color-foreground);
     --button-background-color: transparent;
   }
-</style>
+{% endstylesheet %}

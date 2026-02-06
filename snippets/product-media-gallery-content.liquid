@@ -303,6 +303,16 @@
     src="{{ 'product-media-gallery-main-thumbnails.js' | asset_url }}"
     type="module"
   ></script>
+  {%- liquid
+    # Check if we need separate mobile controls
+    assign show_mobile_dots = false
+    if block_settings.slideshow_mobile_controls_style == 'dots' or block_settings.slideshow_mobile_controls_style == 'counter'
+      assign show_mobile_dots = true
+    endif
+  -%}
+  {%- if show_mobile_dots -%}
+    <script src="{{ 'slideshow.js' | asset_url }}" type="module"></script>
+  {%- endif -%}
   <div
     class="product-media-gallery--main-with-thumbnails spacing-style"
     style="{% render 'spacing-style', settings: block_settings %} --thumbnail-size: {{ block_settings.thumbnail_size | default: 100 }}px; --thumbnail-gap: {{ block_settings.thumbnail_gap | default: 10 }}px; --thumbnails-per-view: {{ block_settings.thumbnails_per_view | default: 3 }}; --media-radius: {{ block_settings.media_radius }}px;"
@@ -310,31 +320,78 @@
   >
     <!-- Main Image -->
     <div class="main-image-container">
-      <div class="{{ product_media_container_class }} product-media-container--{{ sorted_media.first.media_type }}{% if block_settings.zoom %} product-media-container--zoomable{% endif %}">
-        {% if block_settings.zoom and sorted_media.first.media_type == 'image' %}
-          <button
-            type="button"
-            class="button button-unstyled product-media-container__zoom-button"
-            aria-label="{{ 'actions.zoom' | t }}"
-            on:click="#zoom-dialog-{{ block_id }}/open/0"
-            data-current-index="0"
-          >
-            <span class="visually-hidden">{{ 'actions.open_image_in_full_screen' | t }}</span>
-          </button>
-        {% endif %}
-        {% if block_settings.aspect_ratio != 'adapt' and block_settings.constrain_to_viewport %}
-          <div class="product-media-constraint-wrapper">
+      {%- comment -%} Desktop: Always show single static image {%- endcomment -%}
+      <div class="desktop-main-image">
+        <div class="{{ product_media_container_class }} product-media-container--{{ sorted_media.first.media_type }}{% if block_settings.zoom %} product-media-container--zoomable{% endif %}">
+          {% if block_settings.zoom and sorted_media.first.media_type == 'image' %}
+            <button
+              type="button"
+              class="button button-unstyled product-media-container__zoom-button"
+              aria-label="{{ 'actions.zoom' | t }}"
+              on:click="#zoom-dialog-{{ block_id }}/open/0"
+              data-current-index="0"
+            >
+              <span class="visually-hidden">{{ 'actions.open_image_in_full_screen' | t }}</span>
+            </button>
+          {% endif %}
+          {% if block_settings.aspect_ratio != 'adapt' and block_settings.constrain_to_viewport %}
+            <div class="product-media-constraint-wrapper">
+              {%- render 'product-media', media: sorted_media.first, sizes: sizes, is_main_product_media: true -%}
+            </div>
+          {% else %}
             {%- render 'product-media', media: sorted_media.first, sizes: sizes, is_main_product_media: true -%}
-          </div>
-        {% else %}
-          {%- render 'product-media', media: sorted_media.first, sizes: sizes, is_main_product_media: true -%}
-        {% endif %}
+          {% endif %}
+        </div>
       </div>
+
+      {% if show_mobile_dots %}
+        {%- comment -%} Mobile: Use slideshow component for dot controls {%- endcomment -%}
+        <div class="mobile-main-slideshow">
+          {% capture main_slides %}
+            {% for media in sorted_media %}
+              {% capture slide_content %}
+                {% if block_settings.aspect_ratio != 'adapt' and block_settings.constrain_to_viewport %}
+                  <div class="product-media-constraint-wrapper">
+                    {%- render 'product-media', media: media, sizes: sizes, is_main_product_media: forloop.first -%}
+                  </div>
+                {% else %}
+                  {%- render 'product-media', media: media, sizes: sizes, is_main_product_media: forloop.first -%}
+                {% endif %}
+              {% endcapture %}
+              {% capture slide_class %}
+                {{ product_media_container_class }} product-media-container--{{ media.media_type }}{% if block_settings.zoom %} product-media-container--zoomable{% endif %}
+              {% endcapture %}
+              {% render 'slideshow-slide',
+                index: forloop.index0,
+                children: slide_content,
+                class: slide_class
+              %}
+            {% endfor %}
+          {% endcapture %}
+          
+          {% capture mobile_controls %}
+            {%- render 'slideshow-controls',
+              style: block_settings.slideshow_mobile_controls_style,
+              item_count: sorted_media.size,
+              controls_on_media: false,
+              pagination_position: 'center'
+            -%}
+          {% endcapture %}
+          
+          {% render 'slideshow',
+            ref: 'mainSlideshow',
+            class: 'main-thumbnails-slideshow',
+            slides: main_slides,
+            slide_count: sorted_media.size,
+            controls: mobile_controls
+          %}
+        </div>
+      {% endif %}
     </div>
 
     <!-- Thumbnail Carousel -->
     {% if sorted_media.size > 1 %}
-      <div class="thumbnail-carousel-container">
+      <div class="thumbnail-carousel-container {% if show_mobile_dots %}desktop-only{% endif %}">
       
         <div class="thumbnail-carousel-wrapper">
           <ul class="thumbnail-carousel list-unstyled">
@@ -954,6 +1011,49 @@
     object-fit: cover;
   }
 
+  /* Slideshow wrapper for mobile dots */
+  .main-image-container .main-thumbnails-slideshow {
+    width: 100%;
+  }
+
+  .main-image-container .main-thumbnails-slideshow .slideshow__slides {
+    aspect-ratio: 700 / 520;
+  }
+
+  .main-image-container .main-thumbnails-slideshow slideshow-controls {
+    margin-top: 12px;
+  }
+
+  /* Desktop: show traditional image, hide mobile slideshow */
+  @media screen and (min-width: 750px) {
+    .desktop-main-image {
+      display: block;
+    }
+    
+    .mobile-main-slideshow {
+      display: none;
+    }
+    
+    .thumbnail-carousel-container.desktop-only {
+      display: flex;
+    }
+  }
+
+  /* Mobile: show slideshow with dots, hide traditional image and thumbnails */
+  @media screen and (max-width: 749px) {
+    .desktop-main-image {
+      display: none;
+    }
+    
+    .mobile-main-slideshow {
+      display: block;
+    }
+    
+    .thumbnail-carousel-container.desktop-only {
+      display: none;
+    }
+  }
+
   .thumbnail-carousel-container {
     display: flex;
     align-items: center;
@@ -1049,9 +1149,20 @@
       height: auto;
     }
 
+    .main-image-container .main-thumbnails-slideshow .slideshow__slides {
+      aspect-ratio: auto;
+    }
+
     .thumbnail-item {
       flex: 0 0 calc((100% - 20px) / 3);
       width: calc((100% - 20px) / 3);
+    }
+  }
+
+  /* Hide slideshow on desktop when mobile dots are active */
+  @media screen and (min-width: 750px) {
+    .main-thumbnails-slideshow {
+      display: none;
     }
   }
 
