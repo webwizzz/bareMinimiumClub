@@ -1,8 +1,8 @@
 
 
 {% liquid
-  # Consistent order for all screen sizes: logo in center, menu on left, search and actions on right
-  assign order = 'menu,logo,localization,search,actions,mobile_menu'
+  # Unified approach: logo in center, menu on left, unified actions (search, cart, menu) on right
+  assign order = 'menu,logo,localization,actions'
 
   assign rows = 'top,bottom' | split: ','
   assign search_style = 'none'
@@ -48,23 +48,32 @@
     content_for 'block', type: '_header-menu', id: 'header-menu'
   endcapture
 
-  capture mobile_menu
-    content_for 'block', type: '_header-menu', id: 'header-menu', variant: 'mobile'
-  endcapture
-
   capture navigation_bar
     content_for 'block', type: '_header-menu', id: 'header-menu', variant: 'navigation_bar', transparent: transparent
   endcapture
 
+  # Find menu linklist from header menu block, fallback to main-menu
+  assign header_menu_linklist = linklists['main-menu']
+  for block in section.blocks
+    if block.type == '_header-menu'
+      if block.settings.menu != blank
+        assign header_menu_linklist = block.settings.menu
+      endif
+      break
+    endif
+  endfor
+
   capture actions
-    render 'header-actions'
+    render 'header-actions', menu_linklist: header_menu_linklist
   endcapture
+  
   capture search
     render 'search', style: search_style
   endcapture
 
-  # Remove mobile search since we're using consistent layout
+  # Mobile search and menu are now part of unified actions
   assign mobile_search = ''
+  assign mobile_menu = ''
 
   assign show_language = section.settings.show_language
   if localization.available_languages.size <= 1
@@ -82,11 +91,7 @@
     assign bottom_row_blocks = bottom_row_blocks | append: 'menu,'
   endif
 
-  if section.settings.search_style != 'none'
-    if section.settings.search_row == 'bottom'
-      assign bottom_row_blocks = bottom_row_blocks | append: 'search,'
-    endif
-  endif
+  # Search is now part of unified actions, no separate search row needed
 
   if section.settings.show_country or section.settings.show_language
     if section.settings.localization_row == 'bottom'

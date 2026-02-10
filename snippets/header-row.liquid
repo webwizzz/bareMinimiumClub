@@ -18,6 +18,9 @@
       when 'actions'
         assign item_column = 'right'
       when 'mobile_menu'
+        assign item_column = 'right'  
+      when 'search'
+        # Search is now part of actions, but keep for backward compatibility
         assign item_column = 'right'
     endcase
 
