@@ -17,7 +17,7 @@
         "mobile_image": "shopify://shop_images/Rectangle_36.png",
         "heading_line1": "BUILT ON THE",
         "heading_line2": "Bare Minimum",
-        "tagline": "Minimal Mindset. Maximum Attitude.",
+        "tagline": "Minimum Effort. Maximum Statement.",
         "button_text": "Shop now",
         "button_link": "",
         "overlay_color": "#ffffff",
@@ -106,7 +106,7 @@
         "columns": 4,
         "mobile_columns": "2",
         "mobile_card_size": "44cqw",
-        "columns_gap": 4,
+        "columns_gap": 5,
         "rows_gap": 12,
         "icons_style": "arrow",
         "icons_shape": "none",
@@ -116,7 +116,7 @@
         "color_scheme": "scheme-1",
         "padding-block-start": 48,
         "padding-block-end": 10,
-        "padding-inline-start": 0,
+        "padding-inline-start": 5,
         "padding-inline-end": 0
       }
     },
@@ -188,6 +188,7 @@
           ]
         }
       },
+      "disabled": true,
       "name": "t:names.collections_grid",
       "settings": {
         "collection_list": [

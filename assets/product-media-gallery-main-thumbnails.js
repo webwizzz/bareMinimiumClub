@@ -12,6 +12,8 @@ class ProductMediaGalleryMainThumbnails {
     this.thumbnailItems = container.querySelectorAll('.thumbnail-item');
     this.prevBtn = container.querySelector('.thumbnail-nav-btn--prev');
     this.nextBtn = container.querySelector('.thumbnail-nav-btn--next');
+    this.mainPrevBtn = container.querySelector('.main-image-nav-btn--prev');
+    this.mainNextBtn = container.querySelector('.main-image-nav-btn--next');
     this.hiddenMedia = container.querySelector('.hidden-media');
     
     this.currentIndex = 0;
@@ -24,6 +26,7 @@ class ProductMediaGalleryMainThumbnails {
 
   init() {
     this.setupThumbnailNavigation();
+    this.setupMainImageNavigation();
     this.setupMainImageSwitching();
     this.setupScrollListener();
     this.updateNavigationState();
@@ -43,6 +46,24 @@ class ProductMediaGalleryMainThumbnails {
     
     if (this.nextBtn) {
       this.nextBtn.addEventListener('click', () => this.scrollThumbnails('next'));
+    }
+  }
+
+  setupMainImageNavigation() {
+    if (this.mainPrevBtn) {
+      this.mainPrevBtn.addEventListener('click', () => {
+        let newIndex = this.currentIndex - 1;
+        if (newIndex < 0) newIndex = this.thumbnailItems.length - 1;
+        this.switchMainImage(newIndex);
+      });
+    }
+    
+    if (this.mainNextBtn) {
+      this.mainNextBtn.addEventListener('click', () => {
+        let newIndex = this.currentIndex + 1;
+        if (newIndex >= this.thumbnailItems.length) newIndex = 0;
+        this.switchMainImage(newIndex);
+      });
     }
   }
 

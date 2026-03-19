@@ -29,7 +29,7 @@
             "thumbnail_position": "bottom",
             "thumbnail_width": 44,
             "thumbnail_radius": 0,
-            "aspect_ratio": "2/1",
+            "aspect_ratio": "adapt",
             "constrain_to_viewport": true,
             "media_fit": "cover",
             "media_radius": 0,
@@ -65,7 +65,7 @@
             "border_width": 1,
             "border_opacity": 100,
             "border_radius": 0,
-            "padding-block-start": 32,
+            "padding-block-start": 0,
             "padding-block-end": 16,
             "padding-inline-start": 12,
             "padding-inline-end": 0
@@ -197,7 +197,7 @@
                 "accordion_row_VyFryh": {
                   "type": "_accordion-row",
                   "settings": {
-                    "heading": "Product Details",
+                    "heading": "Why we made this",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 30
@@ -242,12 +242,12 @@
               "type": "product-tabs",
               "name": "Product tabs",
               "settings": {
-                "tab1_heading": "Shipping Details",
-                "tab1_content": "<p>Orders are processed within 24 hours of being placed<br/></p><ul><li>All sale orders will be subject to a $200 COD shipping charge.</li><li>A flat fee of  $50 is applied on all prepaid orders below 1990</li><li>We offer free shipping on prepaid orders above 1990/-</li><li>Cash on delivery charges are rupees 150 for all orders</li><li>Delivery times are as follows:</li><li>Shipping to metro cities takes 3-4 working days, and to tier 1 takes 5-7 days</li></ul>",
-                "tab2_heading": "Returns",
-                "tab2_content": "<p>lorem ipsum bla bla</p>",
-                "tab3_heading": "Size Help",
-                "tab3_content": "<p>lorem ipsum</p>"
+                "tab1_heading": "Product Details",
+                "tab1_content": "<p>We know nobody reads this stuff, so here’s what matters:</p><ul><li>Oversized Fit</li><li>260 GSM Cotton Looper Fabric <br/>(Perfect comfort for all seasons)</li><li>Premium Puff Print</li><li>Machine Wash Cold, Inside Out</li><li>Reverse Iron Only</li><li>When it stinks- WASH IT!</li></ul>",
+                "tab2_heading": "Shipping",
+                "tab2_content": "<p>We don't keep you waiting.</p><ul><li>All orders are dispatched within 24-48 hours and delivered in 4-7 working days.</li><li>⁠Free shipping on all prepaid orders. COD orders may incur additional charges.</li></ul>",
+                "tab3_heading": "Returns",
+                "tab3_content": "<p>We're confident you won't need this. But just in case.</p><ul><li>Items must be unused with tags attached, and return requests must be raised within 5 days of delivery.<br/></li><li> Pickup is scheduled within 1-5 days, and quality checks are conducted upon arrival at our warehouse.</li></ul><p> For Refunds and Exchanges <a href=\"https://thebareminimumclub.com/pages/return-refund-policy\" target=\"_blank\" title=\"https://thebareminimumclub.com/pages/return-refund-policy\"><span style=\"text-decoration:underline\"><em>click here.</em></span></a></p>"
               },
               "blocks": {}
             }
@@ -262,15 +262,16 @@
           ]
         }
       },
+      "custom_css": [],
       "settings": {
         "content_width": "content-center-aligned",
         "desktop_media_position": "left",
         "equal_columns": false,
         "limit_details_width": false,
         "gap": 4,
-        "enable_sticky_add_to_cart": true,
+        "enable_sticky_add_to_cart": false,
         "color_scheme": "",
-        "padding-block-start": 20,
+        "padding-block-start": 26,
         "padding-block-end": 32
       }
     },

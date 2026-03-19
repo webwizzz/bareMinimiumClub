@@ -285,6 +285,54 @@
       background-color: var(--color-background);
     }
   {% endif %}
+
+  .desktop-main-image {
+    position: relative;
+  }
+
+  .main-image-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+    color: #000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .main-image-nav-btn:hover {
+    opacity: 1;
+    background-color: #fff;
+  }
+
+  .main-image-nav-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .main-image-nav-btn--prev {
+    left: 10px;
+  }
+
+  .main-image-nav-btn--next {
+    right: 10px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .main-image-nav-btn {
+      display: none !important;
+    }
+  }
 {% endstyle %}
 
 {% if closest.product == blank %}
@@ -322,6 +370,13 @@
     <div class="main-image-container">
       {%- comment -%} Desktop: Always show single static image {%- endcomment -%}
       <div class="desktop-main-image">
+        {% if sorted_media.size > 1 %}
+          <button class="main-image-nav-btn main-image-nav-btn--prev" type="button" aria-label="Previous image">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M7.5 9L4.5 6L7.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        {% endif %}
         <div class="{{ product_media_container_class }} product-media-container--{{ sorted_media.first.media_type }}{% if block_settings.zoom %} product-media-container--zoomable{% endif %}">
           {% if block_settings.zoom and sorted_media.first.media_type == 'image' %}
             <button
@@ -342,6 +397,13 @@
             {%- render 'product-media', media: sorted_media.first, sizes: sizes, is_main_product_media: true -%}
           {% endif %}
         </div>
+        {% if sorted_media.size > 1 %}
+          <button class="main-image-nav-btn main-image-nav-btn--next" type="button" aria-label="Next image">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M4.5 3L7.5 6L4.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        {% endif %}
       </div>
 
       {% if show_mobile_dots %}
@@ -368,7 +430,7 @@
               %}
             {% endfor %}
           {% endcapture %}
-          
+
           {% capture mobile_controls %}
             {%- render 'slideshow-controls',
               style: block_settings.slideshow_mobile_controls_style,
@@ -377,7 +439,7 @@
               pagination_position: 'center'
             -%}
           {% endcapture %}
-          
+
           {% render 'slideshow',
             ref: 'mainSlideshow',
             class: 'main-thumbnails-slideshow',
@@ -392,13 +454,22 @@
     <!-- Thumbnail Carousel -->
     {% if sorted_media.size > 1 %}
       <div class="thumbnail-carousel-container {% if show_mobile_dots %}desktop-only{% endif %}">
-      
         <div class="thumbnail-carousel-wrapper">
           <ul class="thumbnail-carousel list-unstyled">
             {% for media in sorted_media %}
-              <li class="thumbnail-item{% if forloop.first %} active{% endif %}" data-media-index="{{ forloop.index0 }}">
-                <button type="button" class="thumbnail-btn" aria-label="View {{ media.alt | default: 'Product image' }}">
-                  <div class="thumbnail-media" style="{% if block_settings.aspect_ratio == 'adapt' %}--media-preview-ratio: {{ media.preview_image.aspect_ratio | default: 1.0 }};{% endif %}">
+              <li
+                class="thumbnail-item{% if forloop.first %} active{% endif %}"
+                data-media-index="{{ forloop.index0 }}"
+              >
+                <button
+                  type="button"
+                  class="thumbnail-btn"
+                  aria-label="View {{ media.alt | default: 'Product image' }}"
+                >
+                  <div
+                    class="thumbnail-media"
+                    style="{% if block_settings.aspect_ratio == 'adapt' %}--media-preview-ratio: {{ media.preview_image.aspect_ratio | default: 1.0 }};{% endif %}"
+                  >
                     {% liquid
                       assign focal_point_style = ''
                       if media.presentation.focal_point != blank
@@ -421,8 +492,13 @@
             {% endfor %}
           </ul>
         </div>
-        
-        <button class="thumbnail-nav-btn thumbnail-nav-btn--next" type="button" data-nav="next" aria-label="Next thumbnails">
+
+        <button
+          class="thumbnail-nav-btn thumbnail-nav-btn--next"
+          type="button"
+          data-nav="next"
+          aria-label="Next thumbnails"
+        >
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
             <path d="M4.5 3L7.5 6L4.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -991,24 +1067,29 @@
     width: 100%;
   }
 
-  /* Use explicit aspect ratio (700 / 520) to make the gallery slightly wider and a bit shorter.
-     Images will be cropped using object-fit: cover so visual composition stays tight. */
+  /* Let the main image display at its original/natural aspect ratio */
   .main-image-container .product-media-container {
     width: 100%;
     max-width: 100%;
-    aspect-ratio: 700 / 520;
     height: auto;
-    overflow: hidden;
+    overflow: visible;
     position: relative;
   }
 
-  /* Ensure media content fills the container and is cropped when needed */
-  .main-image-container .product-media,
+  /* Override the default product-media aspect-ratio so the image shows at full natural height */
+  .main-image-container .product-media {
+    aspect-ratio: auto !important;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Ensure the image displays at its natural dimensions without cropping */
   .main-image-container .product-media__image,
   .main-image-container img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto !important;
+    object-fit: contain;
   }
 
   /* Slideshow wrapper for mobile dots */
@@ -1017,7 +1098,7 @@
   }
 
   .main-image-container .main-thumbnails-slideshow .slideshow__slides {
-    aspect-ratio: 700 / 520;
+    aspect-ratio: auto;
   }
 
   .main-image-container .main-thumbnails-slideshow slideshow-controls {
@@ -1029,11 +1110,11 @@
     .desktop-main-image {
       display: block;
     }
-    
+
     .mobile-main-slideshow {
       display: none;
     }
-    
+
     .thumbnail-carousel-container.desktop-only {
       display: flex;
     }
@@ -1044,11 +1125,11 @@
     .desktop-main-image {
       display: none;
     }
-    
+
     .mobile-main-slideshow {
       display: block;
     }
-    
+
     .thumbnail-carousel-container.desktop-only {
       display: none;
     }
@@ -1219,14 +1300,14 @@
   }
 
   /* Hide nav buttons when not enough items */
-  .thumbnail-carousel-container[data-items-count="1"] .thumbnail-nav-btn,
-  .thumbnail-carousel-container[data-items-count="2"] .thumbnail-nav-btn,
-  .thumbnail-carousel-container[data-items-count="3"] .thumbnail-nav-btn {
+  .thumbnail-carousel-container[data-items-count='1'] .thumbnail-nav-btn,
+  .thumbnail-carousel-container[data-items-count='2'] .thumbnail-nav-btn,
+  .thumbnail-carousel-container[data-items-count='3'] .thumbnail-nav-btn {
     display: none;
   }
 
   @media screen and (max-width: 480px) {
-    .thumbnail-carousel-container[data-items-count="4"] .thumbnail-nav-btn {
+    .thumbnail-carousel-container[data-items-count='4'] .thumbnail-nav-btn {
       display: none;
     }
   }

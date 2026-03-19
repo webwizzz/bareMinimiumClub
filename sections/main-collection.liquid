@@ -148,6 +148,19 @@
       margin-inline-end: calc(-1 * max(var(--padding-xs), var(--padding-inline-end)));
     }
   }
+
+  /* Match Featured Products (product-list) styling */
+  @media screen and (max-width: 768px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 175px) !important;
+      justify-content: center;
+    }
+  }
+
+  .product-card-title,
+  .product-card-price {
+    font-family: 'satoshi-bold' !important;
+  }
 </style>
 
 {% schema %}

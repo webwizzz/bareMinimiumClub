@@ -1,5 +1,3 @@
-
-
 {% liquid
   # Unified approach: logo in center, menu on left, unified actions (search, cart, menu) on right
   assign order = 'menu,logo,localization,actions'
@@ -125,6 +123,11 @@
 
   if collapse_header_paddings_class
     assign class = class | append: ' ' | append: collapse_header_paddings_class
+  endif
+
+  # Add product page class for pill animation
+  if template.name == 'product'
+    assign class = class | append: ' header--product-page'
   endif
 %}
 
@@ -358,8 +361,6 @@
     z-index: var(--layer-overlay);
 
     &[transparent='not-sticky'][data-sticky-state='active'],
-    /* Only show opaque background when hovering over menu items with children (mega menu)
-       Multiple selectors for performance: each simple :has() check is faster than one complex selector with multiple conditions */
     &:has(.mega-menu__list:hover),
     &:has(.menu-list__link[aria-haspopup]:is(:hover, [aria-expanded='true'], [data-animating])),
     &:has(.menu-list__list-item[slot='overflow'] .menu-list__link:is(:hover, [aria-expanded='true'], [data-animating])) {
@@ -374,14 +375,12 @@
       --color-border-rgb: inherit;
 
       .header__row {
-        /* Faster transition for "in" animation */
         transition: color var(--animation-values-fast), border-color var(--animation-values-fast),
           background-color var(--animation-values-fast);
       }
     }
 
     .header__row {
-      /* Slower transition for "out" animation */
       transition: color var(--animation-values-slow), border-color var(--animation-values-slow),
         background-color var(--animation-values-slow);
     }
@@ -395,7 +394,6 @@
           .menu-list__list-item[slot='overflow'] .menu-list__link:is(:hover, [aria-expanded='true'], [data-animating])
         )
     ) {
-    /* while transparent, header-row ignores its color-scheme settings, pull from the header-component */
     --color-foreground: inherit;
     --color-foreground-rgb: inherit;
     --color-border: inherit;
@@ -433,8 +431,6 @@
   .header-section:has(> #header-component[sticky='always']),
   .header-section:has(> #header-component[sticky='scroll-up'][data-sticky-state='active']) {
     position: sticky;
-
-    /* Use -1 instead of 0 so intersection observer can track sticky state */
     top: -1px;
     z-index: var(--layer-sticky);
   }
@@ -455,8 +451,6 @@
 
   .header__row {
     position: relative;
-
-    /* will default to bg from its color scheme unless --header-bg-color is transparent */
     background-color: var(--header-bg-color, var(--color-background));
   }
 
@@ -513,13 +507,10 @@
   }
 
   .header__columns {
-    /* Three column layout */
     --header-left: 1fr;
     --header-center: auto;
     --header-right: 1fr;
     --header-template-columns: var(--header-left) var(--header-center) var(--header-right);
-
-    /* Mobile layout */
     --header-mobile-bookend: 44px;
 
     display: grid;
@@ -527,28 +518,23 @@
     grid-gap: var(--gap-xl);
     grid-template-columns: var(--header-template-columns);
 
-    /* If menu is in center column */
     &:has(.header__column--center header-menu) {
       --header-center: auto;
       --header-left: minmax(max-content, 1fr);
       --header-right: minmax(max-content, 1fr);
     }
 
-    /* If there is no center column, make the column the menu is in grow eagerly */
     &:where(:not(:has(.header__column--center))) {
       @media screen and (min-width: 750px) {
         --header-template-columns: var(--header-left) var(--header-right);
-
         grid-template-areas: 'left right';
       }
 
-      /* If the header-menu is in the right column */
       &:has(.header__column--right header-menu) {
         --header-right: auto;
         --header-left: minmax(max-content, 1fr);
       }
 
-      /* If the header-menu is in the left column */
       &:has(.header__column--left header-menu) {
         --header-left: auto;
         --header-right: minmax(max-content, 1fr);
@@ -560,7 +546,6 @@
       padding-inline: var(--padding-xs);
     }
 
-    /* Large screen drawer styling */
     @media screen and (min-width: 750px) {
       .header__drawer {
         display: flex;
@@ -574,27 +559,21 @@
         cursor: pointer;
       }
 
-      /* Position drawer button in right column on large screens, after other actions */
       .header__column--right .header__drawer {
-        order: 99; /* Ensure drawer button appears last (after cart icon) in right column */
+        order: 99;
       }
 
-      /* Ensure proper spacing between icons */
       .header__column--right {
         gap: var(--gap-lg);
       }
     }
   }
 
-  /* Single column layout if there are no columns within */
   .header__columns:not(:has(.header__column)) {
     grid-template-columns: 1fr;
   }
 
-  /* Check for hover support to avoid unnecessary expensive recalculations when tapping on mobile */
   @media (hover: hover) {
-    /* Column-specific dimming effect when any interactive element is hovered
-      Multiple selectors for performance: each simple :has() check is faster than one complex selector with multiple conditions */
     .header__column:has(header-menu:hover),
     .header__column:has(.header-actions__action:hover),
     .header__column:has(.dropdown-localization__button:hover),
@@ -609,7 +588,6 @@
     }
   }
 
-  /* Ensure smooth transitions for all interactive elements */
   header-menu,
   .header-actions__action,
   .dropdown-localization__button,
@@ -617,7 +595,6 @@
     transition: opacity var(--animation-speed) var(--animation-easing);
   }
 
-  /* Extend hover area through padding to prevent flickering on actual menu items */
   .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__link[aria-haspopup],
   .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__link,
   .menu-list__list-item:where(:not([slot='overflow'])) > button.menu-list__link {
@@ -627,7 +604,6 @@
     padding-inline: calc(var(--gap-xl) / 2);
   }
 
-  /* Set header paddings based on height setting */
   .header {
     --header-padding: var(--padding-sm);
     --font-paragraph--line-height: 1;
@@ -661,54 +637,51 @@
     }
   }
 
-  /* When the header is transparent, add a margin to a potential header-section below it */
   .header-section:has(.header[transparent]) + .shopify-section {
     margin-top: var(--header-height);
   }
-
-  /* When the header is transparent, and when there is no header-section below it, offset the first main-section with
-   * the height of the header
-   */
 
   main > .shopify-section:first-child .section:not(.disable-section-top-offset) {
     &.spacing-style,
     .spacing-style {
       --section-top-offset: calc(var(--header-height) * var(--transparent-header-offset-boolean));
 
-      /* Any nested sections should not be offset */
       :is(.spacing-style, .inherit-spacing) {
         --section-top-offset: 0px;
       }
     }
 
-    /* Make sticky content immediately stick to the top of the page */
     .sticky-content {
       margin-top: calc(var(--header-height) * var(--transparent-header-offset-boolean) * -1);
     }
   }
 
-  /* Optimize layout performance for hidden menus */
   .header-menu .menu-list__submenu {
     content-visibility: auto;
     contain-intrinsic-size: 0px 500px;
   }
 
-  /* Force visibility when open/animating to prevent layout issues */
   .header-menu details[open] .menu-list__submenu,
   .header-menu .menu-list__submenu[data-active] {
     content-visibility: visible;
   }
 
-  /* Custom pill header to match provided design */
+  /* =====================================================
+     PILL HEADER BASE STYLES
+     ===================================================== */
+
   .header__row--top {
-    /* remove default background so the inner columns form the pill */
     background: transparent;
     padding-block: 18px 0;
   }
 
+  /*
+    Default full-width pill wraps the entire header columns.
+    On product page load this border animates away and moves
+    to wrap only the right-column buttons.
+  */
   .header__row--top .header__columns {
     background-color: var(--color-background);
-    /* enforce requested border color */
     --color-border: #122443;
     --color-border-rgb: 18 36 67;
     border: 2px solid var(--color-border);
@@ -718,9 +691,119 @@
     margin-inline: calc(var(--page-margin));
     align-items: center;
     box-shadow: 0 2px 0 rgba(16, 24, 40, 0.02);
+    transition:
+      border-color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+      background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+      padding-inline 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.3s ease;
   }
 
-  /* Mobile adjustments for pill header */
+  /* =====================================================
+     PILL SHRINK ANIMATION — PRODUCT PAGE ON LOAD
+     The border dissolves from the full-width wrapper and
+     re-appears on the right column only. Logo stays fully
+     visible on the left, outside any border.
+     ===================================================== */
+
+  /*
+    Shrunk state: strip the border & fill from the outer wrapper.
+    The grid layout stays intact so the logo remains in place.
+  */
+  .header--product-page.header--pill-shrunk .header__row--top .header__columns {
+    border-color: transparent;
+    background-color: transparent;
+    box-shadow: none;
+    padding-inline: 0;
+  }
+
+  /*
+    Pre-set the right column with a transparent border so the
+    transition has something to animate FROM on product pages.
+    (transparent → #122443 over 0.75s)
+  */
+  .header--product-page .header__row--top .header__column--right {
+    border: 2px solid transparent;
+    border-radius: 34px;
+    padding-inline: 16px;
+    padding-block: 4px;
+    background-color: transparent;
+    box-shadow: none;
+    transition:
+      border-color 0.75s cubic-bezier(0.4, 0, 0.2, 1),
+      background-color 0.75s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.75s cubic-bezier(0.4, 0, 0.2, 1),
+      padding 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* =====================================================
+     SHRUNK PILL — RIGHT COLUMN SIZING FIX
+     The key problem: .header__column--right sits inside a
+     1fr grid column, so it always stretches full-width.
+     Fix: when shrunk, switch the grid so the right column
+     is only as wide as its content (fit-content / auto),
+     and float the pill to the right edge via justify-self.
+     ===================================================== */
+
+  /* Shrunk: make the whole grid collapse so right col = content-width only */
+  .header--product-page.header--pill-shrunk .header__row--top .header__columns {
+    border-color: transparent;
+    background-color: transparent;
+    box-shadow: none;
+    padding-inline: 0;
+    /* Override grid so right column fits its content exactly */
+    grid-template-columns: 1fr auto !important;
+    grid-template-areas: 'left right' !important;
+  }
+
+  /* Hide center column entirely when shrunk (no menu in center on this layout) */
+  .header--product-page.header--pill-shrunk .header__row--top .header__column--center {
+    display: none;
+  }
+
+  /* Shrunk state: right column gets the pill border, sized to content */
+  .header--product-page.header--pill-shrunk .header__row--top .header__column--right {
+    border-color: #122443;
+    background-color: var(--color-background);
+    box-shadow: 0 2px 0 rgba(16, 24, 40, 0.02);
+    justify-self: end;
+    /* Mobile-equivalent pill: snug around the 3 icons */
+    padding-inline: 14px;
+    padding-block: 5px;
+    gap: 12px;
+  }
+
+  /* Tablet (750px–1023px): slightly more padding = "60" scale */
+  @media screen and (min-width: 750px) and (max-width: 1023px) {
+    .header--product-page.header--pill-shrunk .header__row--top .header__column--right {
+      padding-inline: 18px;
+      padding-block: 7px;
+      gap: 16px;
+    }
+  }
+
+  /* Desktop (1024px+): a bit more = "70" scale */
+  @media screen and (min-width: 1024px) {
+    .header--product-page.header--pill-shrunk .header__row--top .header__column--right {
+      padding-inline: 22px;
+      padding-block: 9px;
+      gap: 20px;
+    }
+  }
+
+  /* Large desktop (1400px+): same scale, just slightly more gap */
+  @media screen and (min-width: 1400px) {
+    .header--product-page.header--pill-shrunk .header__row--top .header__column--right {
+      padding-inline: 24px;
+      padding-block: 10px;
+      gap: 22px;
+    }
+  }
+
+  /* =====================================================
+     MOBILE ADJUSTMENTS
+     ===================================================== */
+
   @media screen and (max-width: 749px) {
     .header__row--top {
       padding-block: 12px 0;
@@ -732,19 +815,36 @@
       padding-inline: 16px;
       margin-inline: 16px;
     }
+
+    /* Mobile: strip outer pill, same grid fix */
+    .header--product-page.header--pill-shrunk .header__row--top .header__columns {
+      padding-inline: 0;
+      margin-inline: 16px;
+      grid-template-columns: 1fr auto !important;
+    }
+
+    /* Mobile: right column pill — keep original comfortable sizing */
+    .header--product-page .header__row--top .header__column--right {
+      border-radius: 24px;
+      padding-inline: 12px;
+    }
+
+    .header--product-page.header--pill-shrunk .header__row--top .header__column--right {
+      padding-inline: 14px;
+      padding-block: 5px;
+      gap: 12px;
+    }
   }
 
-  /* Slightly increase spacing for logo area to match the visual reference */
+  /* Slightly increase spacing for logo area */
   .header__row--top .header__column--left {
     padding-left: 6px;
   }
 
-  /* Keep actions aligned inside the pill */
   .header__row--top .header__column--right {
     padding-right: 6px;
   }
 
-  /* Mobile adjustments for column spacing */
   @media screen and (max-width: 749px) {
     .header__row--top .header__column--left {
       padding-left: 3px;
@@ -768,7 +868,7 @@
     .header__row--top .menu-list__link,
     .header__row--top .header-actions__action,
     .header__row--top .dropdown-localization__button {
-      font-size: 1.0625rem; /* ~17px */
+      font-size: 1.0625rem;
       padding-inline: 8px;
     }
   }
@@ -786,12 +886,11 @@
     .header__row--top .menu-list__link,
     .header__row--top .header-actions__action,
     .header__row--top .dropdown-localization__button {
-      font-size: 0.875rem; /* ~14px */
+      font-size: 0.875rem;
       padding-inline: 6px;
     }
   }
 
-  /* Keep items vertically centered when icons grow */
   .header__row--top .header-actions__action,
   .header__row--top .menu-list__link {
     display: inline-flex;
@@ -799,18 +898,12 @@
     gap: 0.5rem;
   }
 
-  @media screen and (min-width: 750px) {
-
-  }
-
-  /* Drawer styling for all screen sizes */
   .header__drawer {
     display: flex;
     align-items: center;
-    margin-left: 4px; /* Slight extra spacing between cart icon and menu drawer */
+    margin-left: 4px;
   }
 
-  /* Ensure drawer button is visible and properly styled */
   .header__icon--menu {
     display: flex !important;
     align-items: center;
@@ -821,7 +914,6 @@
     transition: background-color var(--animation-speed) ease;
   }
 
-  /* Mobile drawer button sizing */
   @media screen and (max-width: 749px) {
     .header__icon--menu {
       padding: 6px;
@@ -832,13 +924,11 @@
     opacity: 0.6;
   }
 
-  /* Drawer menu positioning */
   .menu-drawer-container[open] .menu-drawer {
     width: 320px;
     max-width: 90vw;
   }
 
-  /* Mobile drawer sizing */
   @media screen and (max-width: 749px) {
     .menu-drawer-container[open] .menu-drawer {
       width: 280px;
@@ -858,7 +948,6 @@
       height: var(--icon-size-lg);
     }
 
-    /* Make only right-side header icons exactly 24x24 */
     .header__column--right .svg-wrapper,
     .header__column--right .svg-wrapper > svg,
     .header__column--right svg {
@@ -867,14 +956,12 @@
       transform: translateY(2px);
     }
 
-    /* Ensure search and cart icons are exactly the same size on desktop */
     .header__column--right .header-actions__cart-icon .svg-wrapper,
     .header__column--right .search-action .svg-wrapper {
       width: 24px !important;
       height: 24px !important;
     }
 
-    /* Increase space between search and cart on the right side (desktop only) */
     .header__column--right .search-action {
       margin-inline-end: 24px !important;
     }
@@ -893,7 +980,6 @@
       height: 20px;
     }
 
-    /* Make mobile right-side header icons 20x20 */
     .header__column--right .svg-wrapper,
     .header__column--right .svg-wrapper > svg,
     .header__column--right svg {
@@ -901,40 +987,33 @@
       height: 20px !important;
     }
 
-    /* Ensure search and cart icons are exactly the same size on mobile */
     .header__column--right .header-actions__cart-icon .svg-wrapper,
     .header__column--right .search-action .svg-wrapper {
       width: 20px !important;
       height: 20px !important;
     }
 
-    /* Tighter spacing between icons on mobile to match desktop style */
     .header__column--right .search-action {
       margin-inline-end: 8px !important;
     }
 
-    /* Reduce gap between cart and menu drawer on mobile */
     .header__drawer {
       margin-left: 2px;
     }
 
-    /* Prevent logo from shrinking on mobile and make it bigger */
     .header-logo {
       flex-shrink: 0;
     }
 
-    /* Make mobile logo bigger to match desktop proportions */
     .header-logo__image {
       height: calc(var(--header-logo-image-height-mobile) * 2.5) !important;
       width: calc(var(--header-logo-image-width-mobile) * 2.5) !important;
     }
 
-    /* Position logo at left edge on mobile */
     .header__column--left .header-logo {
       margin-inline: 0;
     }
 
-    /* Tighter gap in right column on mobile */
     .header__column--right {
       gap: var(--gap-xs);
     }
@@ -949,6 +1028,61 @@
     hydrate('{{ section.id }}', url);
   </script>
 {% endunless %}
+
+{% comment %}
+  Pill shrink animation script — only runs on product pages.
+  On page load, waits briefly then collapses the full-width pill
+  into a small pill wrapping just the 3 action buttons.
+  Expanding back happens when navigating away (not needed here).
+{% endcomment %}
+{% if template.name == 'product' %}
+  <style>
+    /*
+      On product pages the pill starts full-width (default state),
+      then we add header--pill-shrunk after a short delay on load.
+      We need the transition to be active from the start so the
+      collapse animates visibly — but we delay adding the class so
+      the browser has painted the full pill first.
+    */
+
+    /* Ensure columns are in their expanded state before JS fires */
+    .header--product-page .header__row--top .header__columns {
+      /* Start with opacity 0 so the initial full-width flash is invisible */
+      opacity: 0;
+    }
+
+    /* Fade the pill in as it animates to shrunk state */
+    .header--product-page.header--pill-animate-in .header__row--top .header__columns {
+      opacity: 1;
+    }
+  </style>
+
+  <script>
+    (function () {
+      const SHRUNK_CLASS    = 'header--pill-shrunk';
+      const ANIMATE_CLASS   = 'header--pill-animate-in';
+
+      const header = document.getElementById('header-component');
+      if (!header) return;
+
+        /*
+        Sequence:
+        1. rAF #1 — browser paints the full-width pill (opacity 1 via ANIMATE_CLASS).
+        2. 80ms pause — enough time for the full-width pill to register visually.
+        3. Add SHRUNK_CLASS — CSS transitions fire:
+             • outer pill border fades to transparent (0.6s)
+             • right column border fades in from transparent (0.75s)
+        This gives a clear "border travels from wide to narrow" read.
+      */
+      requestAnimationFrame(function () {
+        header.classList.add(ANIMATE_CLASS);
+        setTimeout(function () {
+          header.classList.add(SHRUNK_CLASS);
+        }, 80);
+      });
+    })();
+  </script>
+{% endif %}
 
 {% schema %}
 {

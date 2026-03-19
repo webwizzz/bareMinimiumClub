@@ -230,7 +230,8 @@ class PredictiveSearchComponent extends Component {
           event.preventDefault();
           this.#currentItem?.querySelector('a')?.click();
         } else {
-          const searchUrl = new URL(Theme.routes.search_url, location.origin);
+          // Route search strings to All Products instead of the broken /search page
+          const searchUrl = new URL('/collections/all', location.origin);
           searchUrl.searchParams.set('q', this.refs.searchInput.value);
           window.location.href = searchUrl.toString();
         }
